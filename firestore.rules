@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isRole(r) { return request.auth!= null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == r; }
+    match /users/{userId} { allow read: if request.auth.uid == userId || isRole('CEO') || isRole('MANAGER'); allow create, delete: if isRole('CEO'); allow update: if request.auth.uid == userId || isRole('CEO'); }
+    match /parts/{partId} { allow read: if request.auth!= null; allow write: if isRole('CEO') || isRole('MANAGER') || isRole('SALES'); }
+    match /jobs/{jobId} { allow read: if request.auth!= null; allow create: if isRole('RECEPTION') || isRole('MANAGER') || isRole('CEO'); allow update: if isRole('TECHNICIAN') || isRole('MANAGER') || isRole('CEO'); }
+    match /{document=**} { allow read, write: if false; }
+  }
+}
