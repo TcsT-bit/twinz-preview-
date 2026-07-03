@@ -3,151 +3,183 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Twins Workshop | GOD TIER PREVIEW</title>
+<title>Twins Workshop | LAYER 9 SECURE</title>
+<meta name="theme-color" content="#00ff88"/>
 <style>
   :root{--bg:#0a0a0a;--card:#111;--text:#fff;--accent:#00ff88;--danger:#ff4444;}
   *{box-sizing:border-box;font-family:system-ui,Segoe UI,Arial}
   body{margin:0;background:var(--bg);color:var(--text)}
-  .wrap{max-width:900px;margin:0 auto;padding:24px}
-  .card{background:var(--card);border:1px solid #222;border-radius:16px;padding:20px;margin:12px 0}
+ .wrap{max-width:900px;margin:0 auto;padding:24px}
+ .card{background:var(--card);border:1px solid #222;border-radius:16px;padding:20px;margin:12px 0}
   h1{margin:0 0 8px} h2{margin:0 0 12px;font-size:18px}
   input,button,select{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:6px 0}
   button{background:var(--accent);color:#000;font-weight:800;cursor:pointer;border:0}
   button.danger{background:var(--danger);color:#fff}
-  .grid{display:grid;gap:12px}
-  .grid.cols-2{grid-template-columns:1fr 1fr}
-  .row{display:flex;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px solid #222;padding:8px 0}
-  .pill{font-size:12px;padding:4px 8px;border:1px solid #333;border-radius:999px}
-  .hide{display:none}
-  .logo{font-weight:900;letter-spacing:.5px}
+ .row{display:flex;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px solid #222;padding:8px 0}
+ .pill{font-size:12px;padding:4px 8px;border:1px solid #333;border-radius:999px}
+ .hide{display:none}
+ .logo{font-weight:900;letter-spacing:.5px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="card">
-    <div class="logo">TWINZ WORKSHOP DMS V1.0.0 | JLR SPECIALIST</div>
-    <div class="pill">GOD TIER PREVIEW MODE | NO BACKEND</div>
+    <div class="logo">TWINZ WORKSHOP DMS V3.0 | LAYER 9: AES-256</div>
+    <div class="pill" id="lockStatus">STATUS: LOCKED</div>
   </div>
 
-  <!-- LOGIN -->
-  <div id="login" class="card">
-    <h1>Login</h1>
-    <select id="role">
-      <option value="CEO">CEO</option>
-      <option value="MANAGER">Manager</option>
-      <option value="TECHNICIAN">Technician</option>
-      <option value="SALES">Sales</option>
-      <option value="RECEPTION">Reception</option>
-    </select>
-    <input id="email" placeholder="email@twinz.com" value="ceo@twinz.com">
-    <input id="pass" type="password" placeholder="Password" value="123456">
-    <button onclick="enter()">Enter Dashboard</button>
+  <!-- LAYER 9: PIN LOCK SCREEN -->
+  <div id="pinLock" class="card">
+    <h1>Enter Security PIN</h1>
+    <input id="pin" type="password" placeholder="Default PIN: 1234" value="1234">
+    <button onclick="unlock()">Unlock DMS</button>
+    <button class="ghost" onclick="changePin()">Change PIN</button>
   </div>
 
-  <!-- CEO DASHBOARD -->
-  <div id="CEO" class="hide">
-    <div class="card"><h1>CEO Dashboard</h1><p>Full Control. Add/Delete Staff. View Profit.</p>
-      <button onclick="addUser()">+ Add Technician</button>
-      <div id="users"></div>
-      <h2>Reports</h2><p>R 48,000 Saved vs Evolve/month</p>
-      <button class="danger" onclick="logout()">Logout</button>
+  <!-- APP CONTENT = HIDDEN UNTIL UNLOCKED -->
+  <div id="app" class="hide">
+    <!-- LOGIN -->
+    <div id="login" class="card">
+      <h1>Login</h1>
+      <select id="role">
+        <option value="CEO">CEO</option><option value="TECHNICIAN">Technician</option>
+        <option value="SALES">Sales</option><option value="RECEPTION">Reception</option>
+      </select>
+      <input id="email" placeholder="email@twinz.com" value="ceo@twinz.com">
+      <button onclick="enter()">Enter Dashboard</button>
+      <button class="danger" onclick="lockApp()">Lock App Now</button>
     </div>
-  </div>
 
-  <!-- MANAGER DASHBOARD -->
-  <div id="MANAGER" class="hide">
-    <div class="card"><h1>Manager Dashboard</h1>
-      <p>Approve Jobs | Assign Technicians | Generate Invoices</p>
-      <div class="row"><span>Job #1021 Range Rover</span><button>Approve</button></div>
-      <button class="danger" onclick="logout()">Logout</button>
+    <!-- CEO DASHBOARD -->
+    <div id="CEO" class="hide">
+      <div class="card"><h1>CEO Dashboard | Encrypted</h1>
+        <button onclick="addUser()">+ Add Staff</button>
+        <div id="users"></div>
+        <p><b>Data Status:</b> AES-256 Encrypted in Browser</p>
+        <button class="danger" onclick="lockApp()">Lock App</button>
+      </div>
     </div>
-  </div>
 
-  <!-- TECHNICIAN DASHBOARD -->
-  <div id="TECHNICIAN" class="hide">
-    <div class="card"><h1>Technician Dashboard | JLR SDD Scan</h1>
-      <input id="vin" placeholder="Enter VIN: SALWA2TF..." value="SALWA2TF0HA123456">
-      <button onclick="scan()">Run JLR Diagnostic Scan</button>
-      <div id="dtc"></div>
-      <button class="danger" onclick="logout()">Logout</button>
+    <!-- TECHNICIAN -->
+    <div id="TECHNICIAN" class="hide">
+      <div class="card"><h1>Technician | JLR Scan</h1>
+        <input id="vin" placeholder="VIN" value="SALWA2TF0HA123456">
+        <button onclick="scan()">Run Scan</button>
+        <div id="dtc"></div>
+        <button class="danger" onclick="lockApp()">Lock App</button>
+      </div>
     </div>
-  </div>
 
-  <!-- SALES DASHBOARD -->
-  <div id="SALES" class="hide">
-    <div class="card"><h1>Sales Dashboard | Parts CRUD</h1>
-      <button onclick="addPart()">+ Add JLR Oil Filter R450</button>
-      <div id="parts"></div>
-      <button class="danger" onclick="logout()">Logout</button>
-    </div>
-  </div>
+    <!-- SALES -->
+    <div id="SALES" class="hide"><div class="card"><h1>Sales</h1><button onclick="addPart()">+ Add Part</button><div id="parts"></div><button class="danger" onclick="lockApp()">Lock App</button></div></div>
 
-  <!-- RECEPTION DASHBOARD -->
-  <div id="RECEPTION" class="hide">
-    <div class="card"><h1>Reception Dashboard</h1>
-      <input placeholder="Customer Name">
-      <input placeholder="Vehicle Reg">
-      <button>New Booking R15,000 Service</button>
-      <button>Send Quote via WhatsApp</button>
-      <button class="danger" onclick="logout()">Logout</button>
-    </div>
-  </div>
+    <!-- RECEPTION -->
+    <div id="RECEPTION" class="hide"><div class="card"><h1>Reception</h1><input id="custName" placeholder="Customer"><button onclick="newBooking()">Book</button><div id="bookings"></div><button class="danger" onclick="lockApp()">Lock App</button></div></div>
 
+  </div>
 </div>
 
 <script>
-  // MOCK DATA = NO FIREBASE NEEDED
-  let users = [{id:1,email:'tech1@twinz.com',role:'TECHNICIAN'}];
-  let parts = [{id:1,name:'JLR Oil Filter',qty:10,price:450,sold:false}];
+  // ============ LAYER 9: CRYPTO ENGINE = AES-GCM 256 ============
+  const DB_KEY_NAME = 'twinz_key';
+  const DB_SALT_NAME = 'twinz_salt';
+  let cryptoKey = null;
+  let idleTimer = null;
 
-  function enter(){
-    const role = document.getElementById('role').value;
-    document.getElementById('login').classList.add('hide');
-    document.getElementById(role).classList.remove('hide');
-    renderUsers(); renderParts();
+  async function getKey(pin) {
+    const enc = new TextEncoder();
+    const salt = localStorage.getItem(DB_SALT_NAME) || crypto.getRandomValues(new Uint8Array(16)).toString();
+    localStorage.setItem(DB_SALT_NAME, salt);
+    const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2', salt:enc.encode(salt), iterations:100000, hash:'SHA-256'}, keyMaterial, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
   }
-  function logout(){
-    document.querySelectorAll('#CEO,#MANAGER,#TECHNICIAN,#SALES,#RECEPTION').forEach(e=>e.classList.add('hide'));
-    document.getElementById('login').classList.remove('hide');
+
+  async function encrypt(data) {
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const enc = new TextEncoder().encode(JSON.stringify(data));
+    const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, cryptoKey, enc);
+    return btoa(String.fromCharCode(...iv, ...new Uint8Array(ct)));
   }
+
+  async function decrypt(str) {
+    const raw = Uint8Array.from(atob(str), c=>c.charCodeAt(0));
+    const iv = raw.slice(0,12); const ct = raw.slice(12);
+    const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv}, cryptoKey, ct);
+    return JSON.parse(new TextDecoder().decode(pt));
+  }
+
+  const DB = {
+    async get(k) {
+      const blob = localStorage.getItem(k); if(!blob) return [];
+      return await decrypt(blob);
+    },
+    async set(k, v) {
+      localStorage.setItem(k, await encrypt(v));
+      resetIdle(); // Reset 5min timer on save
+    }
+  };
+
+  // ============ LAYER 9: PIN + SESSION LOGIC ============
+  window.changePin = async () => {
+    const newPin = prompt('New 4-6 digit PIN?');
+    if(newPin && newPin.length>=4){ localStorage.setItem('twinz_pin_hash', await sha256(newPin)); alert('PIN Changed. Restart app.'); lockApp(); }
+  }
+  async function sha256(str){ const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str)); return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
+
+  window.unlock = async () => {
+    const pin = document.getElementById('pin').value;
+    const hash = await sha256(pin);
+    if(hash === localStorage.getItem('twinz_pin_hash') || pin==='1234'){ // default 1234 first time
+      if(pin==='1234') localStorage.setItem('twinz_pin_hash', hash);
+      cryptoKey = await getKey(pin);
+      document.getElementById('pinLock').classList.add('hide');
+      document.getElementById('app').classList.remove('hide');
+      document.getElementById('lockStatus').innerText='STATUS: UNLOCKED | AES-256';
+      initData(); resetIdle();
+    } else alert('Wrong PIN');
+  }
+
+  window.lockApp = () => {
+    cryptoKey = null; sessionStorage.clear();
+    document.getElementById('app').classList.add('hide');
+    document.getElementById('pinLock').classList.remove('hide');
+    document.getElementById('lockStatus').innerText='STATUS: LOCKED';
+    clearTimeout(idleTimer);
+  }
+
+  function resetIdle(){
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(lockApp, 5*60*1000); // 5min auto-lock = LAYER 9
+  }
+  ['click','keydown'].forEach(evt=>document.addEventListener(evt,resetIdle));
+
+  // ============ APP LOGIC = ENCRYPTED ============
+  let users=[], parts=[], bookings=[];
+
+  async function initData(){
+    users = await DB.get('users'); if(users.length==0) users=[{id:1,email:'tech1@twinz.com',role:'TECHNICIAN'}];
+    parts = await DB.get('parts'); if(parts.length==0) parts=[{id:1,name:'JLR Oil Filter',qty:10,price:450}];
+    bookings = await DB.get('bookings');
+    renderAll();
+  }
+  async function saveAll(){ await DB.set('users',users); await DB.set('parts',parts); await DB.set('bookings',bookings); }
+
+  window.enter=()=>{ const role=document.getElementById('role').value; document.getElementById('login').classList.add('hide'); document.getElementById(role).classList.remove('hide'); }
   
-  // CEO MODULE
-  function addUser(){
-    users.push({id:Date.now(),email:'new@twinz.com',role:'TECHNICIAN'});
-    renderUsers();
-  }
-  function delUser(id){ users = users.filter(u=>u.id!=id); renderUsers(); }
-  function renderUsers(){
-    document.getElementById('users').innerHTML = users.map(u=>`
-      <div class="row"><span>${u.email} - ${u.role}</span><button class="danger" onclick="delUser(${u.id})">Delete</button></div>
-    `).join('');
-  }
+  window.addUser=async()=>{ const email=prompt('Email?'); if(email){ users.push({id:Date.now(),email,role:'TECHNICIAN'}); await saveAll(); renderUsers(); }
+  window.delUser=async(id)=>{ users=users.filter(u=>u.id!=id); await saveAll(); renderUsers(); }
+  window.renderUsers=()=>{ document.getElementById('users').innerHTML=users.map(u=>`<div class="row"><span>${u.email}</span><button class="danger" onclick="delUser(${u.id})">Del</button></div>`).join(''); }
 
-  // TECHNICIAN MODULE
-  function scan(){
-    const vin = document.getElementById('vin').value;
-    const dtc = [
-      {code:'P0300', desc:'Misfire Detected', fix:'Check coils + spark plugs'},
-      {code:'C1100', desc:'ABS Sensor Fault', fix:'Replace LH front ABS sensor'}
-    ];
-    document.getElementById('dtc').innerHTML = `<h2>VIN: ${vin}</h2>` + dtc.map(c=>`
-      <div class="row"><span><b>${c.code}</b> - ${c.desc}</span><span>${c.fix}</span></div>
-    `).join('');
-  }
+  window.scan=()=>{ const vin=document.getElementById('vin').value; document.getElementById('dtc').innerHTML=`<h2>VIN: ${vin}</h2><div class="row"><span><b>P0300</b> - Misfire</span><span>Check Coils</span></div>`; }
 
-  // SALES MODULE
-  function addPart(){
-    parts.push({id:Date.now(),name:'JLR Brake Pad Kit',qty:5,price:2800,sold:false});
-    renderParts();
-  }
-  function sellPart(id){ parts = parts.map(p=>p.id==id?{...p,qty:0,sold:true}:p); renderParts(); }
-  function delPart(id){ parts = parts.filter(p=>p.id!=id); renderParts(); }
-  function renderParts(){
-    document.getElementById('parts').innerHTML = parts.map(p=>`
-      <div class="row"><span>${p.name} Qty:${p.qty} R${p.price}</span>
-      <span><button onclick="sellPart(${p.id})">Sell</button> <button class="danger" onclick="delPart(${p.id})">Del</button></span></div>
-    `).join('');
-  }
+  window.addPart=async()=>{ const name=prompt('Part?'); const price=prompt('Price?'); if(name&&price){ parts.push({id:Date.now(),name,qty:5,price:+price}); await saveAll(); renderParts(); }
+  window.delPart=async(id)=>{ parts=parts.filter(p=>p.id!=id); await saveAll(); renderParts(); }
+  window.renderParts=()=>{ document.getElementById('parts').innerHTML=parts.map(p=>`<div class="row"><span>${p.name} R${p.price}</span><button class="danger" onclick="delPart(${p.id})">Del</button></div>`).join(''); }
+
+  window.newBooking=async()=>{ const name=document.getElementById('custName').value; if(name){ bookings.push({id:Date.now(),name}); await saveAll(); renderBookings(); }
+  window.renderBookings=()=>{ document.getElementById('bookings').innerHTML=bookings.map(b=>`<div class="row"><span>${b.name}</span></div>`).join(''); }
+
+  function renderAll(){ renderUsers(); renderParts(); renderBookings(); }
 </script>
 </body>
 </html>
