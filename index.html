@@ -3,28 +3,36 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Twins Workshop | LAYER 9 SECURE</title>
+<title>TWINZ WORKSHOP DMS V4.0 | LAYER 9+ SECURE</title>
 <meta name="theme-color" content="#00ff88"/>
 <style>
-  :root{--bg:#0a0a0a;--card:#111;--text:#fff;--accent:#00ff88;--danger:#ff4444;}
-  *{box-sizing:border-box;font-family:system-ui,Segoe UI,Arial}
-  body{margin:0;background:var(--bg);color:var(--text)}
- .wrap{max-width:900px;margin:0 auto;padding:24px}
- .card{background:var(--card);border:1px solid #222;border-radius:16px;padding:20px;margin:12px 0}
-  h1{margin:0 0 8px} h2{margin:0 0 12px;font-size:18px}
-  input,button,select{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#000;color:#fff;margin:6px 0}
-  button{background:var(--accent);color:#000;font-weight:800;cursor:pointer;border:0}
-  button.danger{background:var(--danger);color:#fff}
- .row{display:flex;gap:8px;align-items:center;justify-content:space-between;border-bottom:1px solid #222;padding:8px 0}
- .pill{font-size:12px;padding:4px 8px;border:1px solid #333;border-radius:999px}
- .hide{display:none}
- .logo{font-weight:900;letter-spacing:.5px}
+  :root{--bg:#050505;--card:#0f0f0f;--text:#e5e5e5;--accent:#00ff88;--danger:#ff4444;--glow:0 0 20px rgba(0,255,136,0.2)}
+  *{box-sizing:border-box;font-family:'Segoe UI',system-ui,Arial}
+  body{margin:0;background:radial-gradient(800px 400px at 50% -10%, rgba(0,255,136,0.08), transparent),var(--bg);color:var(--text)}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px}
+  .card{background:rgba(15,15,15,0.8);backdrop-filter:blur(10px);border:1px solid #222;border-radius:20px;padding:24px;margin:16px 0;box-shadow:var(--glow);animation:fadeIn .4s}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  h1{margin:0 0 8px;font-size:22px} h2{margin:0 0 12px;font-size:18px;color:var(--accent)}
+  input,button,select{width:100%;padding:14px;border-radius:12px;border:1px solid #333;background:#000;color:#fff;margin:8px 0;font-size:15px}
+  button{background:linear-gradient(135deg,var(--accent),#00cc6a);color:#000;font-weight:900;cursor:pointer;border:0;transition:.2s}
+  button:hover{transform:translateY(-2px);box-shadow:var(--glow)}
+  button.danger{background:linear-gradient(135deg,var(--danger),#cc0000);color:#fff}
+  button.ghost{background:#222;color:var(--text)}
+  button.small{width:auto;padding:8px 14px;font-size:13px}
+  .row{display:flex;gap:10px;align-items:center;justify-content:space-between;border-bottom:1px solid #222;padding:10px 0}
+  .pill{font-size:12px;padding:6px 10px;border:1px solid var(--accent);border-radius:999px;color:var(--accent)}
+  .hide{display:none}
+  .logo{font-weight:900;letter-spacing:1px;font-size:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .stat{text-align:center;padding:16px;border:1px solid #222;border-radius:12px}
+  .stat.num{font-size:28px;font-weight:900;color:var(--accent)}
+  .toast{position:fixed;bottom:20px;right:20px;background:var(--accent);color:#000;padding:12px 18px;border-radius:10px;font-weight:800;z-index:999}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="card">
-    <div class="logo">TWINZ WORKSHOP DMS V3.0 | LAYER 9: AES-256</div>
+    <div class="logo">TWINZ WORKSHOP DMS V4.0 | LAYER 9+ AES-256</div>
     <div class="pill" id="lockStatus">STATUS: LOCKED</div>
   </div>
 
@@ -34,13 +42,16 @@
     <input id="pin" type="password" placeholder="Default PIN: 1234" value="1234">
     <button onclick="unlock()">Unlock DMS</button>
     <button class="ghost" onclick="changePin()">Change PIN</button>
+    <button class="ghost" onclick="exportData()">Export Backup</button>
+    <input type="file" id="importFile" class="hide" onchange="importData(event)">
+    <button class="ghost" onclick="document.getElementById('importFile').click()">Import Backup</button>
   </div>
 
-  <!-- APP CONTENT = HIDDEN UNTIL UNLOCKED -->
+  <!-- APP CONTENT -->
   <div id="app" class="hide">
     <!-- LOGIN -->
     <div id="login" class="card">
-      <h1>Login</h1>
+      <h1>Staff Login</h1>
       <select id="role">
         <option value="CEO">CEO</option><option value="TECHNICIAN">Technician</option>
         <option value="SALES">Sales</option><option value="RECEPTION">Reception</option>
@@ -53,43 +64,65 @@
     <!-- CEO DASHBOARD -->
     <div id="CEO" class="hide">
       <div class="card"><h1>CEO Dashboard | Encrypted</h1>
+        <div class="grid">
+          <div class="stat"><h4>Staff</h4><div class="stat num" id="statUsers">0</div></div>
+          <div class="stat"><h4>Parts</h4><div class="stat num" id="statParts">0</div></div>
+          <div class="stat"><h4>Bookings</h4><div class="stat num" id="statBookings">0</div></div>
+        </div>
         <button onclick="addUser()">+ Add Staff</button>
         <div id="users"></div>
-        <p><b>Data Status:</b> AES-256 Encrypted in Browser</p>
+        <p><b>Data Status:</b> AES-256 Encrypted in Browser | Auto-lock 5min</p>
         <button class="danger" onclick="lockApp()">Lock App</button>
       </div>
     </div>
 
     <!-- TECHNICIAN -->
     <div id="TECHNICIAN" class="hide">
-      <div class="card"><h1>Technician | JLR Scan</h1>
+      <div class="card"><h1>Technician | OBD Scan</h1>
         <input id="vin" placeholder="VIN" value="SALWA2TF0HA123456">
-        <button onclick="scan()">Run Scan</button>
+        <button onclick="scan()">Run Diagnostic Scan</button>
         <div id="dtc"></div>
         <button class="danger" onclick="lockApp()">Lock App</button>
       </div>
     </div>
 
     <!-- SALES -->
-    <div id="SALES" class="hide"><div class="card"><h1>Sales</h1><button onclick="addPart()">+ Add Part</button><div id="parts"></div><button class="danger" onclick="lockApp()">Lock App</button></div></div>
+    <div id="SALES" class="hide">
+      <div class="card"><h1>Sales | Parts Inventory</h1>
+        <input id="partName" placeholder="Part Name">
+        <input id="partPrice" type="number" placeholder="Price R">
+        <button onclick="addPart()">+ Add Part</button>
+        <div id="parts"></div>
+        <button class="danger" onclick="lockApp()">Lock App</button>
+      </div>
+    </div>
 
     <!-- RECEPTION -->
-    <div id="RECEPTION" class="hide"><div class="card"><h1>Reception</h1><input id="custName" placeholder="Customer"><button onclick="newBooking()">Book</button><div id="bookings"></div><button class="danger" onclick="lockApp()">Lock App</button></div></div>
-
+    <div id="RECEPTION" class="hide">
+      <div class="card"><h1>Reception | Bookings</h1>
+        <input id="custName" placeholder="Customer Name">
+        <input id="custPhone" placeholder="Phone">
+        <button onclick="newBooking()">Book Appointment</button>
+        <div id="bookings"></div>
+        <button class="danger" onclick="lockApp()">Lock App</button>
+      </div>
+    </div>
   </div>
 </div>
 
 <script>
-  // ============ LAYER 9: CRYPTO ENGINE = AES-GCM 256 ============
+  // ============ LAYER 9+: CRYPTO ENGINE = AES-GCM 256 ============
   const DB_KEY_NAME = 'twinz_key';
   const DB_SALT_NAME = 'twinz_salt';
   let cryptoKey = null;
   let idleTimer = null;
 
+  function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2500); }
+
   async function getKey(pin) {
     const enc = new TextEncoder();
-    const salt = localStorage.getItem(DB_SALT_NAME) || crypto.getRandomValues(new Uint8Array(16)).toString();
-    localStorage.setItem(DB_SALT_NAME, salt);
+    let salt = localStorage.getItem(DB_SALT_NAME);
+    if(!salt){ salt = [...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,'0')).join(''); localStorage.setItem(DB_SALT_NAME, salt); }
     const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']);
     return crypto.subtle.deriveKey({name:'PBKDF2', salt:enc.encode(salt), iterations:100000, hash:'SHA-256'}, keyMaterial, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
   }
@@ -115,27 +148,27 @@
     },
     async set(k, v) {
       localStorage.setItem(k, await encrypt(v));
-      resetIdle(); // Reset 5min timer on save
+      resetIdle();
     }
   };
 
-  // ============ LAYER 9: PIN + SESSION LOGIC ============
+  // ============ LAYER 9+: PIN + SESSION + BACKUP ============
   window.changePin = async () => {
     const newPin = prompt('New 4-6 digit PIN?');
-    if(newPin && newPin.length>=4){ localStorage.setItem('twinz_pin_hash', await sha256(newPin)); alert('PIN Changed. Restart app.'); lockApp(); }
+    if(newPin && newPin.length>=4){ localStorage.setItem('twinz_pin_hash', await sha256(newPin)); toast('PIN Changed'); lockApp(); }
   }
   async function sha256(str){ const buf=await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str)); return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join(''); }
 
   window.unlock = async () => {
     const pin = document.getElementById('pin').value;
     const hash = await sha256(pin);
-    if(hash === localStorage.getItem('twinz_pin_hash') || pin==='1234'){ // default 1234 first time
+    if(hash === localStorage.getItem('twinz_pin_hash') || pin==='1234'){
       if(pin==='1234') localStorage.setItem('twinz_pin_hash', hash);
       cryptoKey = await getKey(pin);
       document.getElementById('pinLock').classList.add('hide');
       document.getElementById('app').classList.remove('hide');
-      document.getElementById('lockStatus').innerText='STATUS: UNLOCKED | AES-256';
-      initData(); resetIdle();
+      document.getElementById('lockStatus').innerText='STATUS: UNLOCKED | AES-256 ACTIVE';
+      initData(); resetIdle(); toast('DMS Unlocked');
     } else alert('Wrong PIN');
   }
 
@@ -143,15 +176,26 @@
     cryptoKey = null; sessionStorage.clear();
     document.getElementById('app').classList.add('hide');
     document.getElementById('pinLock').classList.remove('hide');
+    document.getElementById('login').classList.remove('hide');
+    ['CEO','TECHNICIAN','SALES','RECEPTION'].forEach(r=>document.getElementById(r).classList.add('hide'));
     document.getElementById('lockStatus').innerText='STATUS: LOCKED';
-    clearTimeout(idleTimer);
+    clearTimeout(idleTimer); toast('App Locked');
   }
 
-  function resetIdle(){
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(lockApp, 5*60*1000); // 5min auto-lock = LAYER 9
-  }
+  function resetIdle(){ clearTimeout(idleTimer); idleTimer = setTimeout(lockApp, 5*60*1000); }
   ['click','keydown'].forEach(evt=>document.addEventListener(evt,resetIdle));
+
+  // BACKUP FEATURE NEW
+  window.exportData = () => {
+    const data = {users:localStorage.getItem('users'),parts:localStorage.getItem('parts'),bookings:localStorage.getItem('bookings'),salt:localStorage.getItem(DB_SALT_NAME),pin:localStorage.getItem('twinz_pin_hash')};
+    const blob = new Blob([JSON.stringify(data)],{type:'application/json'});
+    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`twinz_backup_${Date.now()}.json`; a.click(); toast('Backup Downloaded');
+  }
+  window.importData = (e) => {
+    const file = e.target.files[0]; const reader = new FileReader();
+    reader.onload = () => { const data=JSON.parse(reader.result); Object.keys(data).forEach(k=>localStorage.setItem(k,data[k])); toast('Backup Restored. Unlock app'); };
+    reader.readAsText(file);
+  }
 
   // ============ APP LOGIC = ENCRYPTED ============
   let users=[], parts=[], bookings=[];
@@ -160,25 +204,26 @@
     users = await DB.get('users'); if(users.length==0) users=[{id:1,email:'tech1@twinz.com',role:'TECHNICIAN'}];
     parts = await DB.get('parts'); if(parts.length==0) parts=[{id:1,name:'JLR Oil Filter',qty:10,price:450}];
     bookings = await DB.get('bookings');
-    renderAll();
+    renderAll(); updateStats();
   }
-  async function saveAll(){ await DB.set('users',users); await DB.set('parts',parts); await DB.set('bookings',bookings); }
+  async function saveAll(){ await DB.set('users',users); await DB.set('parts',parts); await DB.set('bookings',bookings); updateStats(); }
 
   window.enter=()=>{ const role=document.getElementById('role').value; document.getElementById('login').classList.add('hide'); document.getElementById(role).classList.remove('hide'); }
   
-  window.addUser=async()=>{ const email=prompt('Email?'); if(email){ users.push({id:Date.now(),email,role:'TECHNICIAN'}); await saveAll(); renderUsers(); }
-  window.delUser=async(id)=>{ users=users.filter(u=>u.id!=id); await saveAll(); renderUsers(); }
-  window.renderUsers=()=>{ document.getElementById('users').innerHTML=users.map(u=>`<div class="row"><span>${u.email}</span><button class="danger" onclick="delUser(${u.id})">Del</button></div>`).join(''); }
+  window.addUser=async()=>{ const email=prompt('Staff Email?'); if(email){ users.push({id:Date.now(),email,role:'TECHNICIAN'}); await saveAll(); renderUsers(); toast('Staff Added'); }}
+  window.delUser=async(id)=>{ users=users.filter(u=>u.id!=id); await saveAll(); renderUsers(); toast('Staff Deleted'); }
+  window.renderUsers=()=>{ document.getElementById('users').innerHTML=users.map(u=>`<div class="row"><span>${u.email} - ${u.role}</span><button class="danger small" onclick="delUser(${u.id})">Del</button></div>`).join(''); }
 
-  window.scan=()=>{ const vin=document.getElementById('vin').value; document.getElementById('dtc').innerHTML=`<h2>VIN: ${vin}</h2><div class="row"><span><b>P0300</b> - Misfire</span><span>Check Coils</span></div>`; }
+  window.scan=()=>{ const vin=document.getElementById('vin').value; document.getElementById('dtc').innerHTML=`<h2>VIN: ${vin}</h2><div class="row"><span><b>P0300</b> - Cylinder Misfire</span><span>Action: Check Coils</span></div><div class="row"><span><b>P0420</b> - Catalyst Efficiency</span><span>Action: Check Exhaust</span></div>`; toast('Scan Complete'); }
 
-  window.addPart=async()=>{ const name=prompt('Part?'); const price=prompt('Price?'); if(name&&price){ parts.push({id:Date.now(),name,qty:5,price:+price}); await saveAll(); renderParts(); }
-  window.delPart=async(id)=>{ parts=parts.filter(p=>p.id!=id); await saveAll(); renderParts(); }
-  window.renderParts=()=>{ document.getElementById('parts').innerHTML=parts.map(p=>`<div class="row"><span>${p.name} R${p.price}</span><button class="danger" onclick="delPart(${p.id})">Del</button></div>`).join(''); }
+  window.addPart=async()=>{ const name=document.getElementById('partName').value; const price=document.getElementById('partPrice').value; if(name&&price){ parts.push({id:Date.now(),name,qty:5,price:+price}); document.getElementById('partName').value=''; document.getElementById('partPrice').value=''; await saveAll(); renderParts(); toast('Part Added'); }}
+  window.delPart=async(id)=>{ parts=parts.filter(p=>p.id!=id); await saveAll(); renderParts(); toast('Part Deleted'); }
+  window.renderParts=()=>{ document.getElementById('parts').innerHTML=parts.map(p=>`<div class="row"><span>${p.name} - Qty:${p.qty} - R${p.price}</span><button class="danger small" onclick="delPart(${p.id})">Del</button></div>`).join(''); }
 
-  window.newBooking=async()=>{ const name=document.getElementById('custName').value; if(name){ bookings.push({id:Date.now(),name}); await saveAll(); renderBookings(); }
-  window.renderBookings=()=>{ document.getElementById('bookings').innerHTML=bookings.map(b=>`<div class="row"><span>${b.name}</span></div>`).join(''); }
+  window.newBooking=async()=>{ const name=document.getElementById('custName').value; const phone=document.getElementById('custPhone').value; if(name){ bookings.push({id:Date.now(),name,phone,date:new Date().toLocaleDateString()}); document.getElementById('custName').value=''; document.getElementById('custPhone').value=''; await saveAll(); renderBookings(); toast('Booking Created'); }}
+  window.renderBookings=()=>{ document.getElementById('bookings').innerHTML=bookings.map(b=>`<div class="row"><span>${b.name} - ${b.phone} - ${b.date}</span></div>`).join(''); }
 
+  function updateStats(){ document.getElementById('statUsers').innerText=users.length; document.getElementById('statParts').innerText=parts.length; document.getElementById('statBookings').innerText=bookings.length; }
   function renderAll(){ renderUsers(); renderParts(); renderBookings(); }
 </script>
 </body>
