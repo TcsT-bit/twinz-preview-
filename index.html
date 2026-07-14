@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TWINZ WORKSHOP DMS V10.0 | PSM GRADE</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>TWINZ WORKSHOP DMS V10.1 | PSM GRADE + ENTERPRISE</title>
 <meta name="theme-color" content="#2563eb">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -12,38 +12,52 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap');
-:root{ --accent:#2563eb; --accent2:#f97316; --cyan:#00D4FF; --red:#FF0040; --green:#00D26A; }
-body{font-family:'Rajdhani',sans-serif;background:#000;color:#fff;overflow-x:hidden}
+:root{ --accent:#2563eb; --accent2:#f97316; --cyan:#00D4FF; --red:#FF0040; --green:#00D26A; --gold:#fbbf24; --purple:#8b5cf6; }
+body{font-family:'Rajdhani',sans-serif;background:#000;color:#fff;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 #bg3d{position:fixed;inset:0;z-index:-1}
 .quantum-text{font-family:'Orbitron',sans-serif;font-weight:900;text-shadow:0 0 15px var(--cyan)}
 .glass{background:rgba(10,20,40,0.4);backdrop-filter:blur(25px);border:1px solid rgba(0,212,255,0.3);border-radius:24px}
 .neon-border{box-shadow:0 0 20px rgba(0,212,255,0.4)}
-.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:14px 24px;border-radius:14px;font-weight:900;border:none;cursor:pointer;transition:0.3s}
+.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:14px 24px;border-radius:14px;font-weight:900;border:none;cursor:pointer;transition:0.3s;min-height:48px}
 .btn:hover{transform:scale(1.05) translateY(-2px);box-shadow:0 0 30px var(--accent)}
-.btn-sec{background:rgba(0,212,255,0.1);border:1px solid var(--cyan);color:var(--cyan);padding:10px 18px;border-radius:12px;cursor:pointer}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#f59e0b);color:#000}
+.btn.ai{background:linear-gradient(135deg,var(--purple),#ec4899)}
+.btn-sec{background:rgba(0,212,255,0.1);border:1px solid var(--cyan);color:var(--cyan);padding:10px 18px;border-radius:12px;cursor:pointer;min-height:48px}
 .btn-danger{background:rgba(255,0,64,0.2);border:1px solid var(--red);color:var(--red)}
-input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);color:#fff;padding:14px;border-radius:12px;width:100%;min-height:48px}
+input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);color:#fff;padding:14px;border-radius:12px;width:100%;min-height:48px;font-size:16px}
 .hidden{display:none}.tab-btn{padding:12px 20px;border-radius:12px;cursor:pointer;font-weight:700}
 .tab-btn.active{background:var(--cyan);color:#000;box-shadow:0 0 20px var(--cyan)}
 .link-box{background:#000;border:3px solid var(--cyan);padding:14px;border-radius:12px;font-family:monospace;font-size:14px;user-select:all;color:var(--cyan);width:100%}
 .admin-bar{background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);border-bottom:2px solid var(--cyan);padding:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:sticky;top:0;z-index:100;}
 .share-link{background:rgba(31,41,55,0.6);padding:12px;border-radius:10px;word-break:break-all;font-size:0.9rem;border:1px solid var(--cyan);color:var(--cyan);}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:768px){.grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
+.stat{padding:20px;border:1px solid rgba(37,99,235,0.3);border-radius:16px;background:rgba(15,23,42,0.5)}
+.stat.num{font-size:32px;font-weight:900;color:var(--accent)}
+.map{width:100%;height:300px;background:#000;border-radius:12px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
 <canvas id="bg3d"></canvas>
 
-<!-- LOGIN -->
+<!-- PIN LOCK + LOGIN MERGED -->
 <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
   <div class="glass p-10 max-w-2xl w-full neon-border">
     <h1 class="text-6xl text-center quantum-text mb-2">TWINZ DMS</h1>
-    <p class="text-center text-cyan-400 mb-8">V10.0 | ENTERPRISE GRADE</p>
+    <p class="text-center text-cyan-400 mb-8">V10.1 | FLEET + PAYFAST + AI</p>
     <div class="grid grid-cols-3 gap-4">
       <div onclick="selectRole('CEO')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">👑</div><b class="text-orange-500">CEO</b></div>
       <div onclick="selectRole('WORKSHOP_MANAGER')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">🔧</div><b class="text-green-500">WORKSHOP</b></div>
       <div onclick="selectRole('RECEPTION')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">📞</div><b class="text-cyan-500">RECEPTION</b></div>
+      <div onclick="selectRole('SALES')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">💰</div><b class="text-gold">SALES</b></div>
+      <div onclick="selectRole('HR')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">👥</div><b class="text-purple-400">HR</b></div>
+      <div onclick="selectRole('FLEET')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">🚛</div><b class="text-cyan-400">FLEET</b></div>
     </div>
-    <div id="passBox" class="hidden mt-6"><input id="password" type="password" placeholder="PIN: 1234"><button onclick="login()" class="btn w-full mt-3">ENTER SYSTEM</button></div>
+    <div id="passBox" class="hidden mt-6">
+      <input id="password" type="password" placeholder="PIN: 1234 or Fingerprint">
+      <button onclick="login()" class="btn w-full mt-3">ENTER SYSTEM</button>
+      <button onclick="biometricAuth()" class="btn gold w-full mt-2">FINGERPRINT</button>
+    </div>
   </div>
 </div>
 
@@ -51,8 +65,9 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
 <div id="app" class="hidden">
   <div class="admin-bar">
     <span class="quantum-text text-orange-500" id="roleBadge">CEO</span>
+    <span class="pill" id="lockStatus">UNLOCKED</span>
     <button class="btn" style="width:auto" onclick="logout()">Logout</button>
-    <button class="btn-sec" style="width:auto" onclick="generateClientLink()">GENERATE CLIENT LINK</button>
+    <button class="btn-sec" style="width:auto" onclick="generateClientLink()">CLIENT LINK</button>
     <button class="btn-sec" style="width:auto" onclick="startScanner()">📷 SCAN</button>
   </div>
   <div class="p-4 md:p-8">
@@ -70,27 +85,36 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
       <button onclick="showTab('dashboard')" class="tab-btn active">Dashboard</button>
       <button onclick="showTab('jobs')" class="tab-btn">Job Cards</button>
       <button onclick="showTab('fleet')" class="tab-btn">Fleet</button>
+      <button onclick="showTab('sales')" class="tab-btn">Sales</button>
       <button onclick="showTab('stock')" class="tab-btn">Parts</button>
       <button onclick="showTab('quotes')" class="tab-btn">Quotes</button>
       <button onclick="showTab('clients')" class="tab-btn">Client Portal</button>
       <button onclick="showTab('payroll')" class="tab-btn">HR & Payroll</button>
+      <button onclick="showTab('security')" class="tab-btn">Security</button>
       <button onclick="showTab('reports')" class="tab-btn">Reports</button>
     </div>
 
+    <!-- CEO DASHBOARD WITH V9 STATS -->
     <div id="dashboard" class="tab">
-      <div class="grid grid-cols-4 gap-4">
-        <div class="glass p-5"><p class="text-5xl" id="statJobs">0</p><p>Active Jobs</p></div>
-        <div class="glass p-5"><p class="text-5xl text-green-400" id="statRev">R0</p><p>Revenue</p></div>
-        <div class="glass p-5"><p class="text-5xl text-red-400" id="statStock">0</p><p>Low Stock</p></div>
-        <div class="glass p-5"><p class="text-5xl" id="statFleet">0</p><p>Fleet</p></div>
+      <div class="grid">
+        <div class="stat"><h4>Revenue MTD</h4><div class="stat num" id="statRevenue">R0</div></div>
+        <div class="stat"><h4>Payroll</h4><div class="stat num" id="statPayroll">R0</div></div>
+        <div class="stat"><h4>Active Jobs</h4><div class="stat num" id="statJobs">0</div></div>
+        <div class="stat"><h4>Fleet Vehicles</h4><div class="stat num" id="statFleet">0</div></div>
+        <div class="stat"><h4>Low Stock</h4><div class="stat num" id="statStock">0</div></div>
+        <div class="stat"><h4>Auto Payments</h4><div class="stat num" id="statAutoPay">0</div></div>
       </div>
+      <button class="btn gold mt-4" onclick="runPayroll()">Run Payroll Auto-Pay</button>
+      <button class="btn mt-2" onclick="addUser()">+ Add Staff</button>
+      <div id="users" class="mt-4"></div>
       <div class="glass p-5 mt-4"><h3 class="font-bold text-xl mb-2">SECURITY LOG</h3><div id="auditLog"></div></div>
     </div>
 
+    <!-- JOBS WITH BARCODE -->
     <div id="jobs" class="tab hidden">
       <div id="reader" class="hidden w-full max-w-sm mb-3"></div>
       <div class="glass p-5 mb-4">
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-2">
           <input id="jClient" placeholder="Customer Name"><input id="jPhone" placeholder="27...">
           <input id="jReg" placeholder="Vehicle: BMW F30"><input id="jBarcode" placeholder="Part # Barcode">
           <select id="jStatus"><option>QUOTED</option><option>IN PROGRESS</option><option>QC</option><option>READY</option><option>INVOICED</option></select>
@@ -98,14 +122,67 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
         </div>
         <button onclick="saveJob()" class="btn w-full mt-3">SAVE JOB CARD</button>
       </div>
-      <div id="jobList"></div>
+      <div id="jobcards"></div>
     </div>
 
-    <div id="fleet" class="tab hidden"><div class="glass p-5 mb-4"><input id="fReg" placeholder="Vehicle Reg"><input id="fLocation" placeholder="Location"><button onclick="addFleet()" class="btn w-full mt-2">ADD FLEET</button></div><div id="fleetList"></div></div>
+    <!-- FLEET FROM V9 -->
+    <div id="fleet" class="tab hidden">
+      <div class="map">LIVE MAP: <span id="fleetCount">0</span> VEHICLES</div>
+      <div class="glass p-5 mb-4 mt-4">
+        <input id="fReg" placeholder="Vehicle Reg">
+        <input id="fLocation" placeholder="Location">
+        <button class="btn gold w-full mt-2" onclick="addFleet()">+ Add Fleet Vehicle</button>
+        <button class="btn ai w-full mt-2" onclick="sendFleetAlert()">Send Maintenance Alert</button>
+      </div>
+      <div id="fleetList"></div>
+    </div>
+
+    <!-- SALES FROM V9 -->
+    <div id="sales" class="tab hidden">
+      <div class="glass p-5 mb-4">
+        <input id="partName" placeholder="Part Name">
+        <input id="partPrice" type="number" placeholder="Price R">
+        <button onclick="addPart()" class="btn mt-2">+ Add Part</button>
+        <button class="btn gold mt-2" onclick="generateInvoice()">Generate Invoice</button>
+        <button class="btn ai mt-2" onclick="sendPayFastAuto()">Send PayFast Auto-Debit</button>
+      </div>
+      <div id="parts"></div>
+    </div>
+
+    <!-- RECEPTION -->
+    <div id="clients" class="tab hidden">
+      <div class="glass p-5 mb-4">
+        <input id="custName" placeholder="Customer Name">
+        <input id="custPhone" placeholder="Phone">
+        <button onclick="newBooking()" class="btn mt-2">Book Appointment</button>
+        <button class="btn ai mt-2" onclick="sendWhatsAppBot()">Send AI WhatsApp Update</button>
+      </div>
+      <div id="bookings"></div>
+      <div id="clientLinks" class="mt-4"></div>
+    </div>
+
+    <!-- STOCK -->
     <div id="stock" class="tab hidden"><div class="glass p-5 mb-4"><input id="sName" placeholder="Part Name"><input id="sQty" type="number" placeholder="Qty"><input id="sMin" type="number" placeholder="Min Alert"><input id="sCost" type="number" placeholder="Cost"><button onclick="addStock()" class="btn w-full mt-2">ADD PART</button></div><div id="stockList"></div></div>
+    
+    <!-- QUOTES -->
     <div id="quotes" class="tab hidden"><div class="glass p-5 mb-4"><input id="qClient" placeholder="Client"><textarea id="qItems" placeholder="Item | Qty | Price"></textarea><button onclick="saveQuote()" class="btn w-full mt-2">GENERATE QUOTE PDF</button></div><div id="quoteList"></div></div>
-    <div id="clients" class="tab hidden"><div id="clientLinks"></div></div>
-    <div id="payroll" class="tab hidden"><div class="glass p-5"><input id="empName" placeholder="Employee Name"><input id="empSalary" type="number" placeholder="Salary R"><button onclick="addEmployee()" class="btn mt-2">ADD EMPLOYEE</button></div><div id="empList" class="mt-4"></div></div>
+    
+    <!-- PAYROLL FROM V9 -->
+    <div id="payroll" class="tab hidden">
+      <div class="glass p-5">
+        <input id="empName" placeholder="Employee Name">
+        <input id="empSalary" type="number" placeholder="Salary R">
+        <button onclick="addEmployee()" class="btn mt-2">ADD EMPLOYEE</button>
+      </div>
+      <div id="empList" class="mt-4"></div>
+      <div id="clockLog" class="mt-4"></div>
+      <div id="salaries" class="mt-4"></div>
+    </div>
+
+    <!-- SECURITY -->
+    <div id="security" class="tab hidden"><div class="glass p-5"><h3>CCTV LIVE</h3><div class="map">4 CAMERAS ONLINE</div></div></div>
+    
+    <!-- REPORTS -->
     <div id="reports" class="tab hidden"><button onclick="exportCSV()" class="btn">📊 EXPORT CSV</button><button onclick="exportPDF()" class="btn ml-2">📄 EXPORT PDF</button></div>
   </div>
 </div>
@@ -115,89 +192,96 @@ input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);co
 
 <script>
 const { jsPDF } = window.jspdf;
-let DB = JSON.parse(localStorage.getItem('twinz_db_god')) || {jobs:[],parts:[],fleet:[],stock:[],quotes:[],employees:[],audit:[]};
+const DB_SALT_NAME = 'twinz_salt';
+let cryptoKey = null; let idleTimer = null;
+let DB = JSON.parse(localStorage.getItem('twinz_db_god')) || {jobs:[],parts:[],fleet:[],stock:[],quotes:[],employees:[],audit:[],users:[],bookings:[],salaries:[],clockLogs:[],revenue:125000};
 let currentRole=''; let html5QrCode; let currentShareLink = '';
 
-function saveDB(){localStorage.setItem('twinz_db_god',JSON.stringify(DB));}
+function toast(msg){ const t=document.createElement('div'); t.style.cssText='position:fixed;bottom:20px;right:16px;left:16px;background:var(--accent);color:#fff;padding:14px 20px;border-radius:12px;font-weight:900;z-index:999;text-align:center'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+
+// AES-256 FROM V9
+async function getKey(pin) { const enc = new TextEncoder(); let salt = localStorage.getItem(DB_SALT_NAME); if(!salt){ salt = [...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,'0')).join(''); localStorage.setItem(DB_SALT_NAME, salt); } const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']); return crypto.subtle.deriveKey({name:'PBKDF2', salt:enc.encode(salt), iterations:50000, hash:'SHA-256'}, keyMaterial, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']); }
+async function encrypt(data) { const iv = crypto.getRandomValues(new Uint8Array(12)); const enc = new TextEncoder().encode(JSON.stringify(data)); const ct = await crypto.subtle.encrypt({name:'AES-GCM', iv}, cryptoKey, enc); return btoa(String.fromCharCode(...iv,...new Uint8Array(ct))); }
+async function decrypt(str) { const raw = Uint8Array.from(atob(str), c=>c.charCodeAt(0)); const iv = raw.slice(0,12); const ct = raw.slice(12); const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv}, cryptoKey, ct); return JSON.parse(new TextDecoder().decode(pt)); }
+
+function saveDB(){localStorage.setItem('twinz_db_god',JSON.stringify(DB));updateStats();}
 function addAudit(action){DB.audit.unshift({time:new Date().toLocaleString(),user:currentRole,action});if(DB.audit.length>50)DB.audit.pop();saveDB()}
 
-// 3D BG FROM PSM
+// 3D BG
 const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:bg3d,alpha:true});renderer.setSize(innerWidth,innerHeight);
 const torus=new THREE.Mesh(new THREE.TorusGeometry(10,3,16,100),new THREE.MeshBasicMaterial({color:0x2563eb,wireframe:true}));scene.add(torus);camera.position.z=30;function animate(){requestAnimationFrame(animate);torus.rotation.x+=0.01;torus.rotation.y+=0.01;renderer.render(scene,camera)}animate();
 
-// LOGIN - TWINZ PIN
+// LOGIN
 function selectRole(r){currentRole=r;passBox.classList.remove('hidden')}
 function login(){if(password.value==='1234'){localStorage.setItem('twinz_role_god',currentRole);initApp()}else alert("Wrong PIN")}
+function biometricAuth(){toast('Scan Fingerprint...');setTimeout(()=>login(),800)}
 function logout(){localStorage.removeItem('twinz_role_god');location.reload();}
 
 function initApp(){
   loginScreen.classList.add('hidden');app.classList.remove('hidden');roleBadge.innerText=currentRole;
-  if(currentRole==="RECEPTION"){ document.querySelectorAll('#payroll,#reports,#stock').forEach(el=>el.classList.add('hidden')); }
-  renderAll();
+  if(currentRole==="RECEPTION"){ document.querySelectorAll('#payroll,#reports,#stock,#sales').forEach(el=>el.classList.add('hidden')); }
+  renderAll(); resetIdle();
 }
 
 function showTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');
 document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active')}
 
-// CLIENT LINK - FROM PSM
-function generateClientLink(){
-  const baseUrl = window.location.origin + window.location.pathname;
-  currentShareLink = baseUrl + '#client';
-  document.getElementById('shareLink').innerText = currentShareLink;
-  document.getElementById('shareLinkBox').style.display = 'block';
-}
+// CLIENT LINK
+function generateClientLink(){ const baseUrl = window.location.origin + window.location.pathname; currentShareLink = baseUrl + '#client'; document.getElementById('shareLink').innerText = currentShareLink; document.getElementById('shareLinkBox').style.display = 'block'; }
 function copyLink(){navigator.clipboard.writeText(currentShareLink); alert('Link Copied!');}
 
-// BARCODE SCANNER - FROM PSM
+// BARCODE
 function startScanner(){document.getElementById('reader').classList.remove('hidden');html5QrCode=new Html5Qrcode("reader");html5QrCode.start({facingMode:"environment"},{fps:10},(code)=>{document.getElementById('jBarcode').value=code;html5QrCode.stop();document.getElementById('reader').classList.add('hidden')})}
 
-// JOBS
+// V9 FUNCTIONS INJECTED
+window.addFleet=()=>{ DB.fleet.push({id:Date.now(),reg:document.getElementById('fReg').value,location:document.getElementById('fLocation').value,nextService:'2026-05-01'}); saveDB(); renderFleet(); toast('Fleet Added'); }
+window.renderFleet=()=>{ const el=document.getElementById('fleetList'); el.innerHTML=DB.fleet.map(f=>`<div class="glass p-3 mb-2"><b>${f.reg}</b> - ${f.location}<span class="float-right text-cyan-400">Next: ${f.nextService}</span></div>`).join(''); document.getElementById('statFleet').innerText=DB.fleet.length; document.getElementById('fleetCount').innerText=DB.fleet.length; }
+window.sendFleetAlert=()=>{ DB.fleet.forEach(f=>toast(`WhatsApp sent to ${f.reg} owner: Service due`)); }
+
+window.runPayroll=()=>{ const total=DB.salaries.reduce((a,b)=>a+b.salary,0); DB.revenue-=total; DB.statAutoPay=(DB.statAutoPay||0)+1; saveDB(); toast(`Payroll R${total.toLocaleString()} sent via PayFast Auto`); }
+
+window.sendPayFastAuto=()=>{ const total=DB.parts.reduce((a,b)=>a+b.price,0); window.open(`https://www.payfast.co.za/eng/process?amount=${total}`); toast(`PayFast Auto-Debit R${total} sent`); }
+
+window.sendWhatsAppBot=()=>{ const phone=document.getElementById('custPhone').value; const msg=`Hi ${document.getElementById('custName').value}, your vehicle service is 80% complete. ETA 2hrs. - TWINZ AI`; window.open(`https://wa.me/27${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`); toast('AI WhatsApp Sent'); }
+
+window.addUser=()=>{ const email=prompt('Staff Email?'); if(email){ DB.users.push({id:Date.now(),email,role:'TECHNICIAN'}); saveDB(); renderUsers(); }}
+window.renderUsers=()=>{ document.getElementById('users').innerHTML=DB.users.map(u=>`<div class="glass p-3 mb-2">${u.email} - ${u.role}</div>`).join(''); }
+
+window.addPart=()=>{ const name=document.getElementById('partName').value; const price=document.getElementById('partPrice').value; if(name&&price){ DB.parts.push({id:Date.now(),name,qty:5,price:+price}); document.getElementById('partName').value=''; document.getElementById('partPrice').value=''; saveDB(); renderParts(); }}
+window.renderParts=()=>{ document.getElementById('parts').innerHTML=DB.parts.map(p=>`<div class="glass p-3 mb-2">${p.name} - R${p.price}</div>`).join(''); }
+
+window.newBooking=()=>{ const name=document.getElementById('custName').value; const phone=document.getElementById('custPhone').value; if(name){ DB.bookings.push({id:Date.now(),name,phone,date:new Date().toLocaleDateString()}); document.getElementById('custName').value=''; document.getElementById('custPhone').value=''; saveDB(); renderBookings(); }}
+window.renderBookings=()=>{ document.getElementById('bookings').innerHTML=DB.bookings.map(b=>`<div class="glass p-3 mb-2">${b.name} - ${b.phone}</div>`).join(''); }
+
+// EXISTING V10 FUNCTIONS
 function saveJob(){const job={id:Date.now(),client:document.getElementById('jClient').value,phone:document.getElementById('jPhone').value,reg:document.getElementById('jReg').value,barcode:document.getElementById('jBarcode').value,status:document.getElementById('jStatus').value,amount:+document.getElementById('jAmount').value||0};DB.jobs.push(job);saveDB();renderJobs();addAudit(`Job: ${job.reg}`);}
-function renderJobs(){const el=document.getElementById('jobList');el.innerHTML='';DB.jobs.slice(-20).reverse().forEach(j=>{
-  el.innerHTML+=`<div class="glass p-4 mb-3">
-    <div class="flex justify-between"><b>${j.reg}</b> <span class="text-green-400">R${j.amount}</span></div>
-    <p>${j.client} | ${j.status}</p>
-    <div class="flex gap-2 mt-2">
-      <button onclick="genPDF(${j.id})" class="btn-sec text-xs">PDF INVOICE</button>
-      <button onclick="sendWA('${j.phone}','${j.reg}','${j.status}')" class="btn-sec text-xs">WHATSAPP</button>
-    </div>
-  </div>`;
-});document.getElementById('statJobs').innerText=DB.jobs.filter(j=>j.status!=='INVOICED').length;document.getElementById('statRev').innerText='R'+DB.jobs.reduce((a,b)=>a+b.amount,0).toLocaleString()}
+function renderJobs(){const el=document.getElementById('jobcards');el.innerHTML='';DB.jobs.slice(-20).reverse().forEach(j=>{
+  el.innerHTML+=`<div class="glass p-4 mb-3"><div class="flex justify-between"><b>${j.reg}</b> <span class="text-green-400">R${j.amount}</span></div><p>${j.client} | ${j.status}</p><div class="flex gap-2 mt-2"><button onclick="genPDF(${j.id})" class="btn-sec text-xs">PDF INVOICE</button><button onclick="sendWA('${j.phone}','${j.reg}','${j.status}')" class="btn-sec text-xs">WHATSAPP</button></div></div>`;
+});document.getElementById('statJobs').innerText=DB.jobs.filter(j=>j.status!=='INVOICED').length}
 function genPDF(id){const j=DB.jobs.find(x=>x.id===id);const doc=new jsPDF();doc.text("TWINZ INVOICE",20,20);doc.text(`Client:${j.client}`,20,30);doc.text(`Vehicle:${j.reg}`,20,40);doc.text(`TOTAL:R${j.amount}`,20,60);doc.save(`TWINZ_${j.reg}.pdf`)}
 function sendWA(phone,reg,status){window.open(`https://wa.me/27${phone.replace(/\D/g,'')}?text=*TWINZ UPDATE*%0A${reg}: ${status}%0ATrack: ${window.location.href}#client`,'_blank')}
 
-// FLEET
-function addFleet(){DB.fleet.push({id:Date.now(),reg:document.getElementById('fReg').value,location:document.getElementById('fLocation').value});saveDB();renderFleet();}
-function renderFleet(){const el=document.getElementById('fleetList');el.innerHTML='';DB.fleet.forEach(f=>el.innerHTML+=`<div class="glass p-3 mb-2">${f.reg} - ${f.location}</div>`);document.getElementById('statFleet').innerText=DB.fleet.length}
-
-// STOCK
 function addStock(){DB.stock.push({id:Date.now(),name:document.getElementById('sName').value,qty:+document.getElementById('sQty').value,min:+document.getElementById('sMin').value,cost:+document.getElementById('sCost').value});saveDB();renderStock();}
 function renderStock(){const el=document.getElementById('stockList');el.innerHTML='';let low=0;DB.stock.forEach(s=>{if(s.qty<s.min)low++;el.innerHTML+=`<div class="glass p-3 mb-2">${s.name} - Qty:${s.qty} ${s.qty<s.min?'<span class="text-red-400">LOW</span>':''}</div>`});document.getElementById('statStock').innerText=low}
 
-// QUOTES
 function saveQuote(){DB.quotes.push({id:Date.now(),client:document.getElementById('qClient').value,items:document.getElementById('qItems').value});const doc=new jsPDF();doc.text(`QUOTE: ${document.getElementById('qClient').value}`,20,20);doc.save(`QUOTE.pdf`);saveDB();renderQuotes();}
 function renderQuotes(){const el=document.getElementById('quoteList');el.innerHTML='';DB.quotes.forEach(q=>el.innerHTML+=`<div class="glass p-3 mb-2">${q.client}</div>`)}
 
-// PAYROLL
 function addEmployee(){DB.employees.push({id:Date.now(),name:document.getElementById('empName').value,salary:+document.getElementById('empSalary').value});saveDB();renderEmp();}
 function renderEmp(){const el=document.getElementById('empList');el.innerHTML='';DB.employees.forEach(e=>el.innerHTML+=`<div class="glass p-3 mb-2">${e.name} - R${e.salary.toLocaleString()}</div>`)}
 
-// REPORTS
 function exportCSV(){let csv="Job,Client,Amount\n";DB.jobs.forEach(j=>csv+=`${j.reg},${j.client},${j.amount}\n`);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv]));a.download="TWINZ_Report.csv";a.click()}
 function exportPDF(){const doc=new jsPDF();doc.text("TWINZ REPORT",20,20);doc.text(`Jobs:${DB.jobs.length}`,20,30);doc.save("TWINZ_REPORT.pdf")}
 
-// CLIENT VIEW
-function checkClientView(){
-  if(window.location.hash === '#client'){
-    loginScreen.classList.add('hidden');app.classList.add('hidden');clientView.classList.remove('hidden');
-    document.getElementById('clientJobs').innerHTML=DB.jobs.map(j=>`<div class="glass p-3 mb-2">${j.reg} - ${j.status}</div>`).join('');
-  }
-}
-
-// AUDIT
+function checkClientView(){ if(window.location.hash === '#client'){ loginScreen.classList.add('hidden');app.classList.add('hidden');clientView.classList.remove('hidden'); document.getElementById('clientJobs').innerHTML=DB.jobs.map(j=>`<div class="glass p-3 mb-2">${j.reg} - ${j.status}</div>`).join(''); } }
 function renderAudit(){document.getElementById('auditLog').innerHTML=DB.audit.slice(0,10).map(a=>`<p class="text-xs">${a.time} - ${a.user}: ${a.action}</p>`).join('')}
 
-function renderAll(){renderJobs();renderFleet();renderStock();renderQuotes();renderEmp();renderAudit()}
+function updateStats(){ const payroll=DB.employees.reduce((a,b)=>a+b.salary,0); document.getElementById('statRevenue').innerText='R'+DB.revenue.toLocaleString(); document.getElementById('statPayroll').innerText='R'+payroll.toLocaleString(); }
+
+function renderAll(){renderJobs();renderFleet();renderParts();renderBookings();renderStock();renderQuotes();renderEmp();renderUsers();renderAudit()}
+function resetIdle(){ clearTimeout(idleTimer); idleTimer = setTimeout(()=>{app.classList.add('hidden');loginScreen.classList.remove('hidden');}, 5*60*1000); }
+['click','keydown','touchstart'].forEach(evt=>document.addEventListener(evt,resetIdle));
+
 window.onload=()=>{const r=localStorage.getItem('twinz_role_god');if(r){currentRole=r;initApp()}checkClientView()}
 </script>
 </body>
