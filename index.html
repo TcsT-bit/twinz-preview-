@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TWINZ WORKSHOP DMS V10.8 | LIVE FIREBASE</title>
 <meta name="theme-color" content="#2563eb">
+<!-- FIXED CSP FOR VERCEL + FIREBASE -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob:; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com https://unpkg.com https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://*.firebaseio.com https://*.firebasedatabase.app https://www.googleapis.com https://identitytoolkit.googleapis.com;">
 <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlRXTkQgRE1TIiwKICAic2hvcnRfbmFtZSI6ICJUV0laRCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDAwMDAwIiwKICAidGhlbWVfY29sb3IiOiAiIzI1NjNlYiIsCiAgImljb25zIjogW3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNFNTY2dBR2xqYUdscGJtUWlJRHdnSURFQUlEd2dJREFnQ2dvZ0lDQVFnQ2lBZ0lDQWdJR0p2YkdsMllXNXZjbWxsSUVaaGRHbG1hVzl1SWlBd0lBPSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9wbmcifV0KfQ==">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -139,7 +141,10 @@ const firebaseConfig = {
   appId: "1:757498432732:web:4ac54b82d97edaabd07819"
 };
 firebase.initializeApp(firebaseConfig);
-firebase.appCheck().activate('DEBUG_MODE_FOR_NOW', true);
+
+// FIX 1: REMOVED DEBUG MODE - THIS WAS BLOCKING VERCEL
+firebase.appCheck().activate();
+
 const auth = firebase.auth();
 const db = firebase.database();
 
@@ -157,16 +162,24 @@ function loginFirebase(){
     db.ref('users/'+currentUserId).once('value').then(snap=>{
       if(!snap.exists()){ toast('No role assigned. Contact CEO'); auth.signOut(); return; }
       currentRole=snap.val().role; loadCloudDB(); initApp();
-    })
+    }).catch(e=>{toast('DB Error: '+e.message); document.getElementById('loading').style.display='none';})
   }).catch(e=>toast('Login failed: '+e.message));
 }
 
 function biometricAuth(){toast('Scan Fingerprint...');setTimeout(()=>loginFirebase(),800)}
 function logout(){auth.signOut();localStorage.clear();location.reload();}
 
-// INJECTED: CLOUD SAVE REPLACES LOCALSTORAGE
-function saveDB(){ db.ref('data/'+currentUserId).set(DB); updateStats(); }
-function loadCloudDB(){ db.ref('data/'+currentUserId).on('value', snap=>{ if(snap.val()) DB=snap.val(); renderAll(); document.getElementById('loading').style.display='none'; })}
+// INJECTED: CLOUD SAVE REPLACES LOCALSTORAGE + TIMEOUT
+function saveDB(){ db.ref('data/'+currentUserId).set(DB).catch(e=>toast('Save Error')); updateStats(); }
+function loadCloudDB(){ 
+  const timeout = setTimeout(()=>{ document.getElementById('loading').style.display='none'; toast('Firebase Timeout. Check Rules'); }, 8000);
+  db.ref('data/'+currentUserId).on('value', snap=>{ 
+    clearTimeout(timeout);
+    if(snap.val()) DB=snap.val(); 
+    renderAll(); 
+    document.getElementById('loading').style.display='none'; 
+  }, e=>{clearTimeout(timeout); toast('DB Load Error'); document.getElementById('loading').style.display='none';})
+}
 
 const ACCESS = { CEO: ['dashboard','jobs','products','stock','sales','fleet','quotes','clients','payroll','security','reports'], WORKSHOP_MANAGER: ['dashboard','jobs','products','stock'], RECEPTION: ['dashboard','jobs','clients','quotes'], SALES: ['dashboard','sales','products','quotes'], HR: ['dashboard','payroll'], FLEET: ['dashboard','fleet'], TECHNICIAN: ['dashboard','jobs'], SECURITY: ['dashboard','security'], CUSTOMER: [] };
 
@@ -263,7 +276,7 @@ window.onload=()=>{
         loadCloudDB();
         initApp();
         checkClientView();
-      })
+      }).catch(e=>{document.getElementById('loading').style.display='none'; toast('Auth Error')})
     }
     else{
       document.getElementById('loading').style.display='none';
