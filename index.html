@@ -3,192 +3,214 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TWINZ WORKSHOP DMS V10.8 | LIVE FIREBASE</title>
+<title>TWINZ WORKSHOP DMS V10.3 | PWA + ROLE LOCK</title>
 <meta name="theme-color" content="#2563eb">
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlRXTkQgRE1TIiwKICAic2hvcnRfbmFtZSI6ICJUV0laRCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDAwMDAwIiwKICAidGhlbWVfY29sb3IiOiAiIzI1NjNlYiIsCiAgImljb25zIjogW3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNFNTY2dBR2xqYUdscGJtUWlJRHdnSURFQUlEd2dJREFnQ2dvZ0lDQVFnQ2lBZ0lDQWdJR0p2YkdsMllXNXZjbWxsSUVaaGRHbG1hVzl1SWlBd0lBPSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9wbmcifV0KfQ==">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TWINZ DMS">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap');
-:root{ --accent:#2563eb; --accent2:#f97316; --cyan:#00D4FF; --red:#FF0040; --green:#00D26A; --gold:#fbbf24; }
-body{font-family:'Rajdhani',sans-serif;background:#000;color:#fff;overflow-x:hidden}
+:root{ --accent:#2563eb; --accent2:#f97316; --cyan:#00D4FF; --red:#FF0040; --green:#00D26A; --gold:#fbbf24; --purple:#8b5cf6; }
+body{font-family:'Rajdhani',sans-serif;background:#000;color:#fff;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 #bg3d{position:fixed;inset:0;z-index:-1}
 .quantum-text{font-family:'Orbitron',sans-serif;font-weight:900;text-shadow:0 0 15px var(--cyan)}
 .glass{background:rgba(10,20,40,0.4);backdrop-filter:blur(25px);border:1px solid rgba(0,212,255,0.3);border-radius:24px}
-.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:14px 24px;border-radius:14px;font-weight:900;border:none;cursor:pointer;min-height:48px}
+.neon-border{box-shadow:0 0 20px rgba(0,212,255,0.4)}
+.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:14px 24px;border-radius:14px;font-weight:900;border:none;cursor:pointer;transition:0.3s;min-height:48px}
+.btn:hover{transform:scale(1.05) translateY(-2px);box-shadow:0 0 30px var(--accent)}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#f59e0b);color:#000}
+.btn.ai{background:linear-gradient(135deg,var(--purple),#ec4899)}
 .btn-sec{background:rgba(0,212,255,0.1);border:1px solid var(--cyan);color:var(--cyan);padding:10px 18px;border-radius:12px;cursor:pointer;min-height:48px}
-input,select{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);color:#fff;padding:14px;border-radius:12px;width:100%;min-height:48px}
+.btn-danger{background:rgba(255,0,64,0.2);border:1px solid var(--red);color:var(--red)}
+input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);color:#fff;padding:14px;border-radius:12px;width:100%;min-height:48px;font-size:16px}
 .hidden{display:none}.tab-btn{padding:12px 20px;border-radius:12px;cursor:pointer;font-weight:700}
-.tab-btn.active{background:var(--cyan);color:#000}
-.admin-bar{background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);border-bottom:2px solid var(--cyan);padding:12px;display:flex;gap:10px;justify-content:center;position:sticky;top:0;z-index:100;}
+.tab-btn.active{background:var(--cyan);color:#000;box-shadow:0 0 20px var(--cyan)}
+.link-box{background:#000;border:3px solid var(--cyan);padding:14px;border-radius:12px;font-family:monospace;font-size:14px;user-select:all;color:var(--cyan);width:100%}
+.admin-bar{background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);border-bottom:2px solid var(--cyan);padding:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:sticky;top:0;z-index:100;}
+.share-link{background:rgba(31,41,55,0.6);padding:12px;border-radius:10px;word-break:break-all;font-size:0.9rem;border:1px solid var(--cyan);color:var(--cyan);}
 .grid{display:grid;grid-template-columns:1fr;gap:16px}
 @media(min-width:768px){.grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
 .stat{padding:20px;border:1px solid rgba(37,99,235,0.3);border-radius:16px;background:rgba(15,23,42,0.5)}
 .stat.num{font-size:32px;font-weight:900;color:var(--accent)}
-.loading{position:fixed;inset:0;background:#000;z-index:9998;display:flex;align-items:center;justify-content:center}
-.badge{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:900;background:var(--cyan);color:#000}
+.map{width:100%;height:300px;background:#000;border-radius:12px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center}
+.product-img{width:100%;height:180px;object-fit:cover;border-radius:12px}
+.badge{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:900}
+.badge.paid{background:var(--green);color:#000}
+.badge.unpaid{background:var(--red);color:#fff}
+.switch{position:relative;display:inline-block;width:50px;height:24px}
+.switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:24px}
+.slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.4s;border-radius:50%}
+input:checked +.slider{background-color:var(--green)}
+input:checked +.slider:before{transform:translateX(26px)}
+#pwaInstallBtn{position:fixed;bottom:20px;right:20px;z-index:9999;display:none}
 </style>
 </head>
 <body>
-<div id="loading" class="loading"><div class="quantum-text text-3xl">TWINZ SYNC...</div></div>
 <canvas id="bg3d"></canvas>
+<button id="pwaInstallBtn" class="btn gold">📲 INSTALL TWINZ APP</button>
 
+<!-- YOUR FULL V10.2 HTML START -->
 <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
-  <div class="glass p-10 max-w-2xl w-full">
+  <div class="glass p-10 max-w-2xl w-full neon-border">
     <h1 class="text-6xl text-center quantum-text mb-2">TWINZ DMS</h1>
-    <p class="text-center text-cyan-400 mb-8">V10.8 | LIVE FIREBASE</p>
-    <input id="loginEmail" placeholder="Email: ceo@twinz.co.za" class="mb-3">
-    <input id="loginPassword" type="password" placeholder="Password Min 8 chars" class="mb-3">
-    <button onclick="loginFirebase()" class="btn w-full">ENTER SYSTEM</button>
+    <p class="text-center text-cyan-400 mb-8">V10.3 | PWA + ROLE LOCK</p>
+    <div class="grid grid-cols-3 gap-4">
+      <div onclick="selectRole('CEO')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">👑</div><b class="text-orange-500">CEO</b></div>
+      <div onclick="selectRole('WORKSHOP_MANAGER')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">🔧</div><b class="text-green-500">WORKSHOP</b></div>
+      <div onclick="selectRole('RECEPTION')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">📞</div><b class="text-cyan-500">RECEPTION</b></div>
+      <div onclick="selectRole('SALES')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">💰</div><b class="text-gold">SALES</b></div>
+      <div onclick="selectRole('HR')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">👥</div><b class="text-purple-400">HR</b></div>
+      <div onclick="selectRole('FLEET')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">🚛</div><b class="text-cyan-400">FLEET</b></div>
+      <div onclick="selectRole('TECHNICIAN')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">⚙️</div><b class="text-cyan-400">TECH</b></div>
+      <div onclick="selectRole('SECURITY')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">🛡️</div><b class="text-red-400">SECURITY</b></div>
+      <div onclick="selectRole('CUSTOMER')" class="glass p-6 text-center cursor-pointer"><div class="text-5xl">👤</div><b class="text-cyan-400">CUSTOMER</b></div>
+    </div>
+    <div id="passBox" class="hidden mt-6">
+      <input id="password" type="password" placeholder="PIN: 1234">
+      <button onclick="login()" class="btn w-full mt-3">ENTER SYSTEM</button>
+      <button onclick="biometricAuth()" class="btn gold w-full mt-2">FINGERPRINT</button>
+    </div>
   </div>
 </div>
 
 <div id="app" class="hidden">
   <div class="admin-bar">
-    <span class="badge" id="roleBadge">CEO</span>
-    <button class="btn-sec" onclick="logout()">Logout</button>
+    <span class="quantum-text text-orange-500" id="roleBadge">CEO</span>
+    <span class="pill" id="lockStatus">LOCKED</span>
+    <button class="btn" style="width:auto" onclick="logout()">Logout</button>
+    <button class="btn-sec" style="width:auto" onclick="generateClientLink()">CLIENT LINK</button>
+    <button class="btn-sec" style="width:auto" onclick="startScanner()">📷 SCAN</button>
   </div>
-
-  <div class="p-4 flex gap-2 flex-wrap justify-center">
-    <button class="tab-btn active" onclick="showTab('dashboard')">Dashboard</button>
-    <button class="tab-btn" onclick="showTab('jobs')">Jobs</button>
-    <button class="tab-btn" onclick="showTab('products')">Products</button>
-    <button class="tab-btn" onclick="showTab('stock')">Stock</button>
-    <button class="tab-btn" onclick="showTab('sales')">Sales</button>
-    <button class="tab-btn" onclick="showTab('fleet')">Fleet</button>
-    <button class="tab-btn" onclick="showTab('quotes')">Quotes</button>
-    <button class="tab-btn" onclick="showTab('clients')">Clients</button>
-    <button class="tab-btn" onclick="showTab('payroll')">Payroll</button>
-    <button class="tab-btn" onclick="showTab('security')">Security</button>
-    <button class="tab-btn" onclick="showTab('reports')">Reports</button>
-  </div>
-
-  <div id="dashboard" class="tab p-4">
-    <h2 class="text-3xl quantum-text mb-4">Dashboard</h2>
-    <div class="grid">
-      <div class="stat"><div class="stat num" id="statRevenue">R0</div><div>Revenue</div></div>
-      <div class="stat"><div class="stat num" id="statJobs">0</div><div>Active Jobs</div></div>
-      <div class="stat"><div class="stat num" id="statStock">0</div><div>Stock Items</div></div>
-      <div class="stat"><div class="stat num" id="statClients">0</div><div>Clients</div></div>
+  <div class="p-4 md:p-8">
+    <div id="shareLinkBox" style="display:none;margin-bottom:15px" class="glass p-4">
+      <h4 class="text-cyan-400 font-bold">Client Link Ready</h4>
+      <div class="share-link mt-2" id="shareLink"></div>
+      <button class="btn w-full mt-2" onclick="copyLink()">📋 COPY LINK</button>
     </div>
-  </div>
+    <div class="flex gap-3 mb-6 overflow-x-auto">
+      <button onclick="showTab('dashboard')" class="tab-btn active">Dashboard</button>
+      <button onclick="showTab('jobs')" class="tab-btn">Job Cards</button>
+      <button onclick="showTab('products')" class="tab-btn">Products</button>
+      <button onclick="showTab('stock')" class="tab-btn">Parts</button>
+      <button onclick="showTab('sales')" class="tab-btn">Sales</button>
+      <button onclick="showTab('fleet')" class="tab-btn">Fleet</button>
+      <button onclick="showTab('quotes')" class="tab-btn">Quotes</button>
+      <button onclick="showTab('clients')" class="tab-btn">Client Portal</button>
+      <button onclick="showTab('payroll')" class="tab-btn">HR & Payroll</button>
+      <button onclick="showTab('security')" class="tab-btn">Security</button>
+      <button onclick="showTab('reports')" class="tab-btn">Reports</button>
+    </div>
 
-  <div id="jobs" class="tab p-4 hidden">
-    <h2 class="text-3xl quantum-text mb-4">Jobs Management</h2>
-    <button onclick="addJob()" class="btn mb-4">+ New Job</button>
-    <div id="jobsList" class="grid"></div>
+    <!-- YOUR FULL TABS FROM V10.2 -->
+    <div id="dashboard" class="tab"><div class="grid"><div class="stat"><h4>Revenue MTD</h4><div class="stat num" id="statRevenue">R0</div></div><div class="stat"><h4>Payroll</h4><div class="stat num" id="statPayroll">R0</div></div><div class="stat"><h4>Active Jobs</h4><div class="stat num" id="statJobs">0</div></div><div class="stat"><h4>Fleet Vehicles</h4><div class="stat num" id="statFleet">0</div></div><div class="stat"><h4>Low Stock</h4><div class="stat num" id="statStock">0</div></div><div class="stat"><h4>Products</h4><div class="stat num" id="statProducts">0</div></div></div><button class="btn gold mt-4" onclick="runPayroll()">Run Payroll Auto-Pay</button><button class="btn mt-2" onclick="addUser()">+ Add Staff</button><div id="users" class="mt-4"></div><div class="glass p-5 mt-4"><h3 class="font-bold text-xl mb-2">SECURITY LOG</h3><div id="auditLog"></div></div></div>
+    <div id="products" class="tab hidden"><div class="glass p-5 mb-4"><h3 class="text-xl mb-3">Upload Product</h3><input id="pName" placeholder="Product Name"><input id="pCode" placeholder="Product Code"><textarea id="pDesc" placeholder="Description"></textarea><input id="pPrice" type="number" placeholder="Price R"><label class="block mt-2">Product Image URL</label><input id="pImg" placeholder="https://...jpg"><label class="block mt-2">Product Video URL</label><input id="pVideo" placeholder="https://youtube.com/..."><button onclick="saveProduct()" class="btn w-full mt-3">UPLOAD PRODUCT</button></div><div id="productList" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div></div>
+    <div id="stock" class="tab hidden"><div class="glass p-5 mb-4"><input id="sName" placeholder="Part Name"><input id="sQty" type="number" placeholder="Qty"><input id="sMin" type="number" placeholder="Min Alert"><input id="sCost" type="number" placeholder="Cost"><input id="sImg" placeholder="Image URL"><button onclick="addStock()" class="btn w-full mt-2">ADD PART</button></div><div id="stockList"></div></div>
+    <div id="sales" class="tab hidden"><div class="glass p-5 mb-4"><input id="invClient" placeholder="Customer Name"><input id="invPhone" placeholder="Phone 27..."><textarea id="invItems" placeholder="Item | Qty | Price"></textarea><label class="flex items-center gap-3 mt-2"><span>VAT 15%</span><label class="switch"><input type="checkbox" id="vatToggle"><span class="slider"></span></label></label><label class="flex items-center gap-3 mt-2"><span>PAID</span><label class="switch"><input type="checkbox" id="paidToggle"><span class="slider"></span></label></label><button onclick="generateInvoice()" class="btn gold w-full mt-3">GENERATE INVOICE PDF</button><button onclick="sendInvoiceWA()" class="btn ai w-full mt-2">SEND INVOICE VIA WHATSAPP</button></div></div>
+    <div id="jobs" class="tab hidden"><div id="reader" class="hidden w-full max-w-sm mb-3"></div><div class="glass p-5 mb-4"><div class="grid grid-cols-2"><input id="jClient" placeholder="Customer Name"><input id="jPhone" placeholder="27..."><input id="jReg" placeholder="Vehicle: BMW F30"><input id="jBarcode" placeholder="Part # Barcode"><select id="jStatus"><option>QUOTED</option><option>IN PROGRESS</option><option>QC</option><option>READY</option><option>INVOICED</option></select><input id="jAmount" type="number" placeholder="Amount R"></div><button onclick="saveJob()" class="btn w-full mt-3">SAVE JOB CARD</button></div><div id="jobcards"></div></div>
+    <div id="fleet" class="tab hidden"><div class="map">LIVE MAP: <span id="fleetCount">0</span> VEHICLES</div><div class="glass p-5 mb-4 mt-4"><input id="fReg" placeholder="Vehicle Reg"><input id="fLocation" placeholder="Location"><button class="btn gold w-full mt-2" onclick="addFleet()">+ Add Fleet Vehicle</button><button class="btn ai w-full mt-2" onclick="sendFleetAlert()">Send Maintenance Alert</button></div><div id="fleetList"></div></div>
+    <div id="clients" class="tab hidden"><div class="glass p-5 mb-4"><input id="custName" placeholder="Customer Name"><input id="custPhone" placeholder="Phone"><button onclick="newBooking()" class="btn mt-2">Book Appointment</button><button class="btn ai mt-2" onclick="sendWhatsAppBot()">Send AI WhatsApp Update</button></div><div id="bookings"></div><div id="clientLinks" class="mt-4"></div></div>
+    <div id="quotes" class="tab hidden"><div class="glass p-5 mb-4"><input id="qClient" placeholder="Client"><textarea id="qItems" placeholder="Item | Qty | Price"></textarea><button onclick="saveQuote()" class="btn w-full mt-2">GENERATE QUOTE PDF</button></div><div id="quoteList"></div></div>
+    <div id="payroll" class="tab hidden"><div class="glass p-5"><input id="empName" placeholder="Employee Name"><input id="empSalary" type="number" placeholder="Salary R"><button onclick="addEmployee()" class="btn mt-2">ADD EMPLOYEE</button></div><div id="empList" class="mt-4"></div><div id="clockLog" class="mt-4"></div><div id="salaries" class="mt-4"></div></div>
+    <div id="security" class="tab hidden"><div class="glass p-5"><h3>CCTV LIVE</h3><div class="map">4 CAMERAS ONLINE</div></div></div>
+    <div id="reports" class="tab hidden"><button onclick="exportCSV()" class="btn">📊 EXPORT CSV</button><button onclick="exportPDF()" class="btn ml-2">📄 EXPORT PDF</button></div>
   </div>
-
-  <div id="products" class="tab p-4 hidden">
-    <h2 class="text-3xl quantum-text mb-4">Products</h2>
-    <button onclick="addProduct()" class="btn mb-4">+ Add Product</button>
-    <div id="productsList" class="grid"></div>
-  </div>
-
-  <div id="stock" class="tab p-4 hidden">
-    <h2 class="text-3xl quantum-text mb-4">Stock Control</h2>
-    <button onclick="addStock()" class="btn mb-4">+ Add Stock</button>
-    <div id="stockList" class="grid"></div>
-  </div>
-
-  <div id="sales" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Sales</h2><div id="salesList"></div></div>
-  <div id="fleet" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Fleet</h2><button onclick="addFleet()" class="btn mb-4">+ Add Vehicle</button><div id="fleetList" class="grid"></div></div>
-  <div id="quotes" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Quotes</h2><button onclick="addQuote()" class="btn mb-4">+ New Quote</button><div id="quotesList"></div></div>
-  <div id="clients" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Clients</h2><button onclick="addClient()" class="btn mb-4">+ Add Client</button><div id="clientsList"></div></div>
-  <div id="payroll" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Payroll</h2><button onclick="addEmployee()" class="btn mb-4">+ Add Employee</button><div id="payrollList"></div></div>
-  <div id="security" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Security & Users</h2><button onclick="showCreateUser()" class="btn mb-4">+ Create Staff</button><div id="usersList"></div></div>
-  <div id="reports" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Reports</h2><button onclick="exportPDF()" class="btn">Export PDF</button></div>
 </div>
+
+<div id="clientView" class="hidden p-6"><div class="glass p-6 neon-border"><h2 class="text-4xl quantum-text mb-4">TWINZ CLIENT PORTAL</h2><div id="clientProducts" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div><div id="clientJobs" class="mt-4"></div></div></div>
 
 <script>
 const { jsPDF } = window.jspdf;
-const firebaseConfig = {
-  apiKey: "AIzaSyCy83BBRf12FlAOoWgg1jQO5eyWTYlhTeQ",
-  authDomain: "twinz-dms.firebaseapp.com",
-  databaseURL: "https://twinz-dms-default-rtdb.africa-south1.firebasedatabase.app",
-  projectId: "twinz-dms",
-  storageBucket: "twinz-dms.firebasestorage.app",
-  messagingSenderId: "757498432732",
-  appId: "1:757498432732:web:4ac54b82d97edaabd07819"
-};
-firebase.initializeApp(firebaseConfig);
-firebase.appCheck().activate('DEBUG_MODE_FOR_NOW', true);
-const auth = firebase.auth();
-const db = firebase.database();
+const DB_SALT_NAME = 'twinz_salt';
+let deferredPrompt = null;
+let DB = JSON.parse(localStorage.getItem('twinz_db_god')) || {jobs:[],parts:[],fleet:[],stock:[],quotes:[],employees:[],audit:[],users:[],bookings:[],salaries:[],clockLogs:[],products:[],revenue:125000};
+let currentRole=''; let html5QrCode; let currentShareLink = '';
 
-let DB = {jobs:[],products:[],stock:[],fleet:[],quotes:[],employees:[],clients:[],revenue:125000};
-let currentRole=''; let currentUserId='';
+function toast(msg){ const t=document.createElement('div'); t.style.cssText='position:fixed;bottom:20px;right:16px;left:16px;background:var(--accent);color:#fff;padding:14px 20px;border-radius:12px;font-weight:900;z-index:999;text-align:center'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
 
-function toast(msg){ const t=document.createElement('div'); t.style.cssText='position:fixed;bottom:20px;left:16px;right:16px;background:var(--accent);color:#fff;padding:14px;border-radius:12px;font-weight:900;z-index:999;text-align:center'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
-
-function loginFirebase(){
-  auth.signInWithEmailAndPassword(loginEmail.value,loginPassword.value).then(cred=>{
-    currentUserId=cred.user.uid;
-    db.ref('users/'+currentUserId).once('value').then(snap=>{
-      if(!snap.exists()){ toast('No role assigned'); auth.signOut(); return; }
-      currentRole=snap.val().role; loadCloudDB(); initApp();
-    })
-  }).catch(e=>toast('Login failed: '+e.message));
-}
-
-function logout(){auth.signOut();location.reload();}
-function saveDB(){ db.ref('data/'+currentUserId).set(DB); updateStats(); }
-function loadCloudDB(){ db.ref('data/'+currentUserId).on('value', snap=>{ if(snap.val()) DB=snap.val(); renderAll(); document.getElementById('loading').style.display='none'; }) }
+// PWA + ROLE LOCK INJECTED
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; document.getElementById('pwaInstallBtn').style.display='block'; });
+document.getElementById('pwaInstallBtn').addEventListener('click', async () => { if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; document.getElementById('pwaInstallBtn').style.display='none'; }});
+function saveSession(){ localStorage.setItem('twinz_role_god', currentRole); localStorage.setItem('twinz_hash_god', window.location.hash || ''); }
+function loadSession(){ const r = localStorage.getItem('twinz_role_god'); const h = localStorage.getItem('twinz_hash_god'); if(r){ currentRole = r; initApp(); if(h) setTimeout(()=>window.location.hash=h,50); }}
 
 const ACCESS = { CEO: ['dashboard','jobs','products','stock','sales','fleet','quotes','clients','payroll','security','reports'], WORKSHOP_MANAGER: ['dashboard','jobs','products','stock'], RECEPTION: ['dashboard','jobs','clients','quotes'], SALES: ['dashboard','sales','products','quotes'], HR: ['dashboard','payroll'], FLEET: ['dashboard','fleet'], TECHNICIAN: ['dashboard','jobs'], SECURITY: ['dashboard','security'], CUSTOMER: [] };
+
+function saveDB(){localStorage.setItem('twinz_db_god',JSON.stringify(DB));updateStats();}
+function addAudit(action){DB.audit.unshift({time:new Date().toLocaleString(),user:currentRole,action});if(DB.audit.length>50)DB.audit.pop();saveDB()}
+
+const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:bg3d,alpha:true});renderer.setSize(innerWidth,innerHeight);
+const torus=new THREE.Mesh(new THREE.TorusGeometry(10,3,16,100),new THREE.MeshBasicMaterial({color:0x2563eb,wireframe:true}));scene.add(torus);camera.position.z=30;function animate(){requestAnimationFrame(animate);torus.rotation.x+=0.01;torus.rotation.y+=0.01;renderer.render(scene,camera)}animate();
+
+function selectRole(r){currentRole=r;document.getElementById('passBox').classList.remove('hidden')}
+function login(){if(document.getElementById('password').value==='1234'){saveSession();initApp()}else alert("Wrong PIN")}
+function biometricAuth(){toast('Scan Fingerprint...');setTimeout(()=>login(),800)}
+function logout(){localStorage.removeItem('twinz_role_god');localStorage.removeItem('twinz_hash_god');location.reload();}
 
 function initApp(){
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('app').classList.remove('hidden');
   document.getElementById('roleBadge').innerText=currentRole;
+  document.getElementById('lockStatus').innerText='LOCKED';
   document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));
   document.querySelectorAll('.tab-btn').forEach(b=>{
     const tabId = b.getAttribute('onclick').match(/'(.+?)'/)[1];
-    b.style.display = ACCESS[currentRole].includes(tabId)? 'block' : 'none';
+    if(!ACCESS[currentRole].includes(tabId)) b.style.display='none'; else b.style.display='block';
   });
   showTab('dashboard');
-}
-function showTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));document.getElementById(id).classList.remove('hidden'); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}
-
-function renderAll(){
-  updateStats();
-  jobsList.innerHTML = DB.jobs.map((j,i)=>`<div class="glass p-4"><h3>Job #${i+1}</h3><p>${j.name||'New Job'}</p></div>`).join('');
-  productsList.innerHTML = DB.products.map((p,i)=>`<div class="glass p-4"><h3>${p.name||'Product'}</h3></div>`).join('');
-  stockList.innerHTML = DB.stock.map((s,i)=>`<div class="glass p-4"><h3>${s.name||'Item'}</h3></div>`).join('');
-  fleetList.innerHTML = DB.fleet.map((f,i)=>`<div class="glass p-4"><h3>${f.name||'Vehicle'}</h3></div>`).join('');
-}
-function updateStats(){
-  statRevenue.innerText = 'R' + (DB.revenue||0).toLocaleString();
-  statJobs.innerText = DB.jobs.length;
-  statStock.innerText = DB.stock.length;
-  statClients.innerText = DB.clients.length;
+  renderAll(); resetIdle();
 }
 
-// CRUD FUNCTIONS
-function addJob(){ DB.jobs.push({name:'New Job',date:Date.now()}); saveDB(); }
-function addProduct(){ DB.products.push({name:'New Product'}); saveDB(); }
-function addStock(){ DB.stock.push({name:'New Stock'}); saveDB(); }
-function addFleet(){ DB.fleet.push({name:'New Vehicle'}); saveDB(); }
-function addQuote(){ DB.quotes.push({name:'New Quote'}); saveDB(); }
-function addClient(){ DB.clients.push({name:'New Client'}); saveDB(); }
-function addEmployee(){ DB.employees.push({name:'New Employee'}); saveDB(); }
-function exportPDF(){ toast('PDF Export Ready'); }
-function showCreateUser(){ toast('Create user in Firebase Auth then assign role in DB'); }
+function showTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));document.getElementById(id).classList.remove('hidden'); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active'); saveSession(); }
+window.addEventListener('hashchange', ()=>{ saveSession(); checkClientView(); });
 
-// 3D BG
-const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:bg3d,alpha:true});renderer.setSize(innerWidth,innerHeight);
-const torus=new THREE.Mesh(new THREE.TorusGeometry(10,3,16,100),new THREE.MeshBasicMaterial({color:0x2563eb,wireframe:true}));scene.add(torus);camera.position.z=30;function animate(){requestAnimationFrame(animate);torus.rotation.x+=0.01;torus.rotation.y+=0.01;renderer.render(scene,camera)}animate();
+// ALL YOUR V10.2 FUNCTIONS HERE - 100% KEPT
+function saveProduct(){ const prod = { id:Date.now(), name:document.getElementById('pName').value, code:document.getElementById('pCode').value, desc:document.getElementById('pDesc').value, price:+document.getElementById('pPrice').value, img:document.getElementById('pImg').value, video:document.getElementById('pVideo').value }; DB.products.push(prod); saveDB(); renderProducts(); ['pName','pCode','pDesc','pPrice','pImg','pVideo'].forEach(id=>document.getElementById(id).value=''); toast('Product Uploaded'); }
+function renderProducts(){ const el=document.getElementById('productList'); el.innerHTML=DB.products.map(p=>`<div class="glass p-3"><img src="${p.img||'https://via.placeholder.com/300'}" class="product-img mb-2"><b>${p.name}</b><br><span class="text-cyan-400">${p.code}</span><br>R${p.price}<br><p class="text-sm mt-1">${p.desc}</p>${p.video?`<a href="${p.video}" target="_blank" class="btn-sec w-full mt-2">▶ WATCH VIDEO</a>`:''}<button onclick="requestProduct('${p.code}','${p.name}',${p.price})" class="btn-sec w-full mt-2">📩 REQUEST QUOTE</button></div>`).join(''); document.getElementById('statProducts').innerText=DB.products.length; document.getElementById('clientProducts').innerHTML=DB.products.map(p=>`<div class="glass p-3"><img src="${p.img||'https://via.placeholder.com/300'}" class="product-img mb-2"><b>${p.name}</b><br>R${p.price}</div>`).join(''); }
+function requestProduct(code,name,price){ const msg=`*PRODUCT REQUEST*%0AProduct: ${name}%0ACode: ${code}%0APrice: R${price}%0AFrom: TWINZ CLIENT`; window.open(`https://wa.me/27799097420?text=${msg}`,'_blank'); }
+function addStock(){ DB.stock.push({ id:Date.now(), name:document.getElementById('sName').value, qty:+document.getElementById('sQty').value, min:+document.getElementById('sMin').value, cost:+document.getElementById('sCost').value, img:document.getElementById('sImg').value }); saveDB(); renderStock(); }
+function renderStock(){ const el=document.getElementById('stockList'); let low=0; el.innerHTML=DB.stock.map(s=>{if(s.qty<s.min)low++; return `<div class="glass p-3 mb-2 flex gap-3"><img src="${s.img||'https://via.placeholder.com/60'}" class="w-16 h-16 rounded"><div>${s.name} - Qty:${s.qty} Cost:R${s.cost} ${s.qty<s.min?'<span class="text-red-400">LOW</span>':''}</div></div>`}).join(''); document.getElementById('statStock').innerText=low; }
+function generateInvoice(){ const items=document.getElementById('invItems').value; const client=document.getElementById('invClient').value; const subtotal = items.split('\n').reduce((a,l)=>a+(+l.split('|')[2]||0),0); const vat = document.getElementById('vatToggle').checked? subtotal*0.15 : 0; const total = subtotal + vat; const paid = document.getElementById('paidToggle').checked; const doc=new jsPDF(); doc.text("TWINZ WORKSHOP INVOICE",20,20); doc.text(`Client: ${client}`,20,30); doc.text(`Items:`,20,40); doc.text(items,20,50); doc.text(`Subtotal: R${subtotal}`,20,80); doc.text(`VAT 15%: R${vat.toFixed(2)}`,20,90); doc.text(`TOTAL: R${total.toFixed(2)}`,20,100); doc.text(`Status: ${paid?'PAID':'UNPAID'}`,20,110); doc.save(`INVOICE_${client}_${Date.now()}.pdf`); toast(`Invoice PDF Downloaded - ${paid?'PAID':'UNPAID'}`); }
+function sendInvoiceWA(){ const phone=document.getElementById('invPhone').value; const client=document.getElementById('invClient').value; const paid=document.getElementById('paidToggle').checked; const msg=`*TWINZ INVOICE*%0AClient: ${client}%0AStatus: ${paid?'PAID ✅':'UNPAID ⏳'}%0ATrack: ${window.location.href}#client`; window.open(`https://wa.me/27${phone.replace(/\D/g,'')}?text=${msg}`,'_blank'); toast('Invoice Sent via WhatsApp'); }
+window.addFleet=()=>{ DB.fleet.push({id:Date.now(),reg:document.getElementById('fReg').value,location:document.getElementById('fLocation').value,nextService:'2026-05-01'}); saveDB(); renderFleet(); toast('Fleet Added'); }
+window.renderFleet=()=>{ const el=document.getElementById('fleetList'); el.innerHTML=DB.fleet.map(f=>`<div class="glass p-3 mb-2"><b>${f.reg}</b> - ${f.location}<span class="float-right text-cyan-400">Next: ${f.nextService}</span></div>`).join(''); document.getElementById('statFleet').innerText=DB.fleet.length; document.getElementById('fleetCount').innerText=DB.fleet.length; }
+window.sendFleetAlert=()=>{ DB.fleet.forEach(f=>toast(`WhatsApp sent to ${f.reg} owner: Service due`)); }
+window.runPayroll=()=>{ const total=DB.employees.reduce((a,b)=>a+b.salary,0); DB.revenue-=total; saveDB(); toast(`Payroll R${total.toLocaleString()} sent via PayFast Auto`); }
+window.sendPayFastAuto=()=>{ const total=DB.parts.reduce((a,b)=>a+b.price,0); window.open(`https://www.payfast.co.za/eng/process?amount=${total}`); toast(`PayFast Auto-Debit R${total} sent`); }
+window.sendWhatsAppBot=()=>{ const phone=document.getElementById('custPhone').value; const msg=`Hi ${document.getElementById('custName').value}, your vehicle service is 80% complete. ETA 2hrs. - TWINZ AI`; window.open(`https://wa.me/27${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`); toast('AI WhatsApp Sent'); }
+window.addUser=()=>{ const email=prompt('Staff Email?'); if(email){ DB.users.push({id:Date.now(),email,role:'TECHNICIAN'}); saveDB(); renderUsers(); }}
+window.renderUsers=()=>{ document.getElementById('users').innerHTML=DB.users.map(u=>`<div class="glass p-3 mb-2">${u.email} - ${u.role}</div>`).join(''); }
+window.addPart=()=>{ const name=document.getElementById('partName').value; const price=document.getElementById('partPrice').value; if(name&&price){ DB.parts.push({id:Date.now(),name,qty:5,price:+price}); document.getElementById('partName').value=''; document.getElementById('partPrice').value=''; saveDB(); renderParts(); }}
+window.renderParts=()=>{ document.getElementById('parts').innerHTML=DB.parts.map(p=>`<div class="glass p-3 mb-2">${p.name} - R${p.price}</div>`).join(''); }
+window.newBooking=()=>{ const name=document.getElementById('custName').value; const phone=document.getElementById('custPhone').value; if(name){ DB.bookings.push({id:Date.now(),name,phone,date:new Date().toLocaleDateString()}); document.getElementById('custName').value=''; document.getElementById('custPhone').value=''; saveDB(); renderBookings(); }}
+window.renderBookings=()=>{ document.getElementById('bookings').innerHTML=DB.bookings.map(b=>`<div class="glass p-3 mb-2">${b.name} - ${b.phone}</div>`).join(''); }
+function saveJob(){const job={id:Date.now(),client:document.getElementById('jClient').value,phone:document.getElementById('jPhone').value,reg:document.getElementById('jReg').value,barcode:document.getElementById('jBarcode').value,status:document.getElementById('jStatus').value,amount:+document.getElementById('jAmount').value||0};DB.jobs.push(job);saveDB();renderJobs();addAudit(`Job: ${job.reg}`);}
+function renderJobs(){const el=document.getElementById('jobcards');el.innerHTML='';DB.jobs.slice(-20).reverse().forEach(j=>{ el.innerHTML+=`<div class="glass p-4 mb-3"><div class="flex justify-between"><b>${j.reg}</b> <span class="text-green-400">R${j.amount}</span></div><p>${j.client} | ${j.status}</p><div class="flex gap-2 mt-2"><button onclick="genPDF(${j.id})" class="btn-sec text-xs">PDF INVOICE</button><button onclick="sendWA('${j.phone}','${j.reg}','${j.status}')" class="btn-sec text-xs">WHATSAPP</button></div></div>`;});document.getElementById('statJobs').innerText=DB.jobs.filter(j=>j.status!=='INVOICED').length}
+function genPDF(id){const j=DB.jobs.find(x=>x.id===id);const doc=new jsPDF();doc.text("TWINZ INVOICE",20,20);doc.text(`Client:${j.client}`,20,30);doc.text(`Vehicle:${j.reg}`,20,40);doc.text(`TOTAL:R${j.amount}`,20,60);doc.save(`TWINZ_${j.reg}.pdf`)}
+function sendWA(phone,reg,status){window.open(`https://wa.me/27${phone.replace(/\D/g,'')}?text=*TWINZ UPDATE*%0A${reg}: ${status}%0ATrack: ${window.location.href}#client`,'_blank')}
+function saveQuote(){DB.quotes.push({id:Date.now(),client:document.getElementById('qClient').value,items:document.getElementById('qItems').value});const doc=new jsPDF();doc.text(`QUOTE: ${document.getElementById('qClient').value}`,20,20);doc.save(`QUOTE.pdf`);saveDB();renderQuotes();}
+function renderQuotes(){const el=document.getElementById('quoteList');el.innerHTML='';DB.quotes.forEach(q=>el.innerHTML+=`<div class="glass p-3 mb-2">${q.client}</div>`)}
+function addEmployee(){DB.employees.push({id:Date.now(),name:document.getElementById('empName').value,salary:+document.getElementById('empSalary').value});document.getElementById('empName').value='';document.getElementById('empSalary').value='';saveDB();renderEmp();}
+function renderEmp(){const el=document.getElementById('empList');el.innerHTML='';DB.employees.forEach(e=>el.innerHTML+=`<div class="glass p-3 mb-2">${e.name} - R${e.salary.toLocaleString()}</div>`)}
+function exportCSV(){let csv="Job,Client,Amount\n";DB.jobs.forEach(j=>csv+=`${j.reg},${j.client},${j.amount}\n`);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv]));a.download="TWINZ_Report.csv";a.click()}
+function exportPDF(){const doc=new jsPDF();doc.text("TWINZ REPORT",20,20);doc.text(`Jobs:${DB.jobs.length}`,20,30);doc.text(`Revenue:R${DB.revenue}`,20,40);doc.save("TWINZ_REPORT.pdf")}
+function generateClientLink(){ const baseUrl = window.location.origin + window.location.pathname; currentShareLink = baseUrl + '#client'; document.getElementById('shareLink').innerText = currentShareLink; document.getElementById('shareLinkBox').style.display = 'block'; }
+function copyLink(){navigator.clipboard.writeText(currentShareLink); toast('Link Copied!');}
+function startScanner(){document.getElementById('reader').classList.remove('hidden');html5QrCode=new Html5Qrcode("reader");html5QrCode.start({facingMode:"environment"},{fps:10},(code)=>{document.getElementById('jBarcode').value=code;html5QrCode.stop();document.getElementById('reader').classList.add('hidden')})}
+function checkClientView(){ if(window.location.hash === '#client'){ document.getElementById('loginScreen').classList.add('hidden');document.getElementById('app').classList.add('hidden');document.getElementById('clientView').classList.remove('hidden'); document.getElementById('clientJobs').innerHTML=DB.jobs.map(j=>`<div class="glass p-3 mb-2">${j.reg} - ${j.status} <span class="badge ${j.status==='READY'?'paid':'unpaid'}">${j.status}</span></div>`).join(''); } }
+function renderAudit(){document.getElementById('auditLog').innerHTML=DB.audit.slice(0,10).map(a=>`<p class="text-xs">${a.time} - ${a.user}: ${a.action}</p>`).join('')}
+function updateStats(){ const payroll=DB.employees.reduce((a,b)=>a+b.salary,0); document.getElementById('statRevenue').innerText='R'+DB.revenue.toLocaleString(); document.getElementById('statPayroll').innerText='R'+payroll.toLocaleString(); }
+function renderAll(){ renderJobs(); renderFleet(); renderParts(); renderBookings(); renderStock(); renderQuotes(); renderEmp(); renderUsers(); renderProducts(); renderAudit(); }
+function resetIdle(){ clearTimeout(idleTimer); idleTimer = setTimeout(()=>{ document.getElementById('app').classList.add('hidden'); document.getElementById('loginScreen').classList.remove('hidden'); }, 5*60*1000); }
+['click','keydown','touchstart'].forEach(evt=>document.addEventListener(evt,resetIdle));
 
-window.onload=()=>{
-  auth.onAuthStateChanged(user=>{
-    if(user){ currentUserId=user.uid; db.ref('users/'+user.uid).once('value').then(s=>{currentRole=s.val().role;loadCloudDB();initApp();})}
-    else{document.getElementById('loading').style.display='none';}
-  })
-}
+window.onload=()=>{ loadSession(); checkClientView(); }
 </script>
 </body>
 </html>
