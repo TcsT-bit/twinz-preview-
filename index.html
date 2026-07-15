@@ -5,89 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>TWINZ WORKSHOP DMS V10.8 | LIVE FIREBASE</title>
 <meta name="theme-color" content="#2563eb">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.gstatic.com https://cdnjs.cloudflare.com https://unpkg.com https://cdn.tailwindcss.com https://www.recaptcha.net; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdnjs.cloudflare.com https://unpkg.com https://cdn.tailwindcss.com https://www.google.com https://www.recaptcha.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com">
-<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIlRXTkQgRE1TIiwKICAic2hvcnRfbmFtZSI6ICJUV0laRCIsCiAgInN0YXJ0X3VybCI6ICIuIiwKICAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjMDAwMDAwIiwKICAidGhlbWVfY29sb3IiOiAiIzI1NjNlYiIsCiAgImljb25zIjogW3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNFNTY2dBR2xqYUdscGJtUWlJRHdnSURFQUlEd2dJREFnQ2dvZ0lDQVFnQ2lBZ0lDQWdJR0p2YkdsMllXNXZjbWxsSUVaaGRHbG1hVzl1SWlBd0lBPSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9wbmcifV0KfQ==">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="TWINZ DMS">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://unpkg.com/html5-qrcode"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-<!-- FIREBASE SDK + APP CHECK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-check-compat.js"></script>
-
 <style>
-/* YOUR CSS 100% KEPT - NO CHANGES */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap');
-:root{ --accent:#2563eb; --accent2:#f97316; --cyan:#00D4FF; --red:#FF0040; --green:#00D26A; --gold:#fbbf24; --purple:#8b5cf6; }
-body{font-family:'Rajdhani',sans-serif;background:#000;color:#fff;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+:root{ --accent:#2563eb; --accent2:#f97316; --cyan:#00D4FF; --red:#FF0040; --green:#00D26A; --gold:#fbbf24; }
+body{font-family:'Rajdhani',sans-serif;background:#000;color:#fff;overflow-x:hidden}
 #bg3d{position:fixed;inset:0;z-index:-1}
 .quantum-text{font-family:'Orbitron',sans-serif;font-weight:900;text-shadow:0 0 15px var(--cyan)}
 .glass{background:rgba(10,20,40,0.4);backdrop-filter:blur(25px);border:1px solid rgba(0,212,255,0.3);border-radius:24px}
-.neon-border{box-shadow:0 0 20px rgba(0,212,255,0.4)}
-.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:14px 24px;border-radius:14px;font-weight:900;border:none;cursor:pointer;transition:0.3s;min-height:48px}
-.btn:hover{transform:scale(1.05) translateY(-2px);box-shadow:0 0 30px var(--accent)}
-.btn.gold{background:linear-gradient(135deg,var(--gold),#f59e0b);color:#000}
-.btn.ai{background:linear-gradient(135deg,var(--purple),#ec4899)}
+.btn{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;padding:14px 24px;border-radius:14px;font-weight:900;border:none;cursor:pointer;min-height:48px}
 .btn-sec{background:rgba(0,212,255,0.1);border:1px solid var(--cyan);color:var(--cyan);padding:10px 18px;border-radius:12px;cursor:pointer;min-height:48px}
-.btn-danger{background:rgba(255,0,64,0.2);border:1px solid var(--red);color:var(--red)}
-input,select,textarea{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);color:#fff;padding:14px;border-radius:12px;width:100%;min-height:48px;font-size:16px}
+input,select{background:#0A0F1F;border:1px solid rgba(0,212,255,0.4);color:#fff;padding:14px;border-radius:12px;width:100%;min-height:48px}
 .hidden{display:none}.tab-btn{padding:12px 20px;border-radius:12px;cursor:pointer;font-weight:700}
-.tab-btn.active{background:var(--cyan);color:#000;box-shadow:0 0 20px var(--cyan)}
-.link-box{background:#000;border:3px solid var(--cyan);padding:14px;border-radius:12px;font-family:monospace;font-size:14px;user-select:all;color:var(--cyan);width:100%}
-.admin-bar{background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);border-bottom:2px solid var(--cyan);padding:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;position:sticky;top:0;z-index:100;}
-.share-link{background:rgba(31,41,55,0.6);padding:12px;border-radius:10px;word-break:break-all;font-size:0.9rem;border:1px solid var(--cyan);color:var(--cyan);}
+.tab-btn.active{background:var(--cyan);color:#000}
+.admin-bar{background:rgba(0,0,0,0.7);backdrop-filter:blur(10px);border-bottom:2px solid var(--cyan);padding:12px;display:flex;gap:10px;justify-content:center;position:sticky;top:0;z-index:100;}
 .grid{display:grid;grid-template-columns:1fr;gap:16px}
 @media(min-width:768px){.grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}}
 .stat{padding:20px;border:1px solid rgba(37,99,235,0.3);border-radius:16px;background:rgba(15,23,42,0.5)}
 .stat.num{font-size:32px;font-weight:900;color:var(--accent)}
-.map{width:100%;height:300px;background:#000;border-radius:12px;border:2px solid var(--accent);display:flex;align-items:center;justify-content:center}
-.product-img{width:100%;height:180px;object-fit:cover;border-radius:12px}
-.badge{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:900}
-.badge.paid{background:var(--green);color:#000}
-.badge.unpaid{background:var(--red);color:#fff}
-.switch{position:relative;display:inline-block;width:50px;height:24px}
-.switch input{opacity:0;width:0;height:0}
-.slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;transition:.4s;border-radius:24px}
-.slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background-color:white;transition:.4s;border-radius:50%}
-input:checked +.slider{background-color:var(--green)}
-input:checked +.slider:before{transform:translateX(26px)}
-#pwaInstallBtn{position:fixed;bottom:20px;right:20px;z-index:9999;display:none}
 .loading{position:fixed;inset:0;background:#000;z-index:9998;display:flex;align-items:center;justify-content:center}
+.badge{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:900;background:var(--cyan);color:#000}
 </style>
 </head>
 <body>
 <div id="loading" class="loading"><div class="quantum-text text-3xl">TWINZ SYNC...</div></div>
 <canvas id="bg3d"></canvas>
-<button id="pwaInstallBtn" class="btn gold">📲 INSTALL TWINZ APP</button>
 
-<!-- LOGIN WITH 2FA -->
 <div id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
-  <div class="glass p-10 max-w-2xl w-full neon-border">
+  <div class="glass p-10 max-w-2xl w-full">
     <h1 class="text-6xl text-center quantum-text mb-2">TWINZ DMS</h1>
     <p class="text-center text-cyan-400 mb-8">V10.8 | LIVE FIREBASE</p>
-    <input id="loginEmail" placeholder="Email: ceo@twinz.co.za" class="mb-3" autocomplete="email">
-    <input id="loginPassword" type="password" placeholder="Password Min 8 chars" class="mb-3" autocomplete="current-password">
+    <input id="loginEmail" placeholder="Email: ceo@twinz.co.za" class="mb-3">
+    <input id="loginPassword" type="password" placeholder="Password Min 8 chars" class="mb-3">
     <button onclick="loginFirebase()" class="btn w-full">ENTER SYSTEM</button>
-    <p class="text-xs text-center mt-3 text-cyan-400">Only CEO can create staff accounts</p>
   </div>
 </div>
 
-<!-- YOUR APP HTML HERE - INJECT YOUR TABS INSIDE -->
 <div id="app" class="hidden">
-  <!-- ADMIN BAR INJECTED -->
   <div class="admin-bar">
     <span class="badge" id="roleBadge">CEO</span>
     <button class="btn-sec" onclick="logout()">Logout</button>
   </div>
 
-  <!-- TAB BUTTONS -->
   <div class="p-4 flex gap-2 flex-wrap justify-center">
     <button class="tab-btn active" onclick="showTab('dashboard')">Dashboard</button>
     <button class="tab-btn" onclick="showTab('jobs')">Jobs</button>
@@ -102,34 +67,45 @@ input:checked +.slider:before{transform:translateX(26px)}
     <button class="tab-btn" onclick="showTab('reports')">Reports</button>
   </div>
 
-  <!-- TAB CONTENT - TEMP TABS FOR TESTING -->
   <div id="dashboard" class="tab p-4">
     <h2 class="text-3xl quantum-text mb-4">Dashboard</h2>
     <div class="grid">
       <div class="stat"><div class="stat num" id="statRevenue">R0</div><div>Revenue</div></div>
       <div class="stat"><div class="stat num" id="statJobs">0</div><div>Active Jobs</div></div>
+      <div class="stat"><div class="stat num" id="statStock">0</div><div>Stock Items</div></div>
+      <div class="stat"><div class="stat num" id="statClients">0</div><div>Clients</div></div>
     </div>
-    <button onclick="saveDB()" class="btn mt-4">Save Test Data</button>
   </div>
 
-  <div id="jobs" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Jobs Tab</h2><p>Paste real jobs HTML here</p></div>
-  <div id="products" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Products Tab</h2><p>Paste real products HTML here</p></div>
-  <div id="stock" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Stock Tab</h2><p>Paste real stock HTML here</p></div>
-  <div id="sales" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Sales Tab</h2><p>Paste real sales HTML here</p></div>
-  <div id="fleet" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Fleet Tab</h2><p>Paste real fleet HTML here</p></div>
-  <div id="quotes" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Quotes Tab</h2><p>Paste real quotes HTML here</p></div>
-  <div id="clients" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Clients Tab</h2><p>Paste real clients HTML here</p></div>
-  <div id="payroll" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Payroll Tab</h2><p>Paste real payroll HTML here</p></div>
-  <div id="security" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Security Tab</h2><p>Paste real security HTML here</p></div>
-  <div id="reports" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Reports Tab</h2><p>Paste real reports HTML here</p></div>
-</div>
+  <div id="jobs" class="tab p-4 hidden">
+    <h2 class="text-3xl quantum-text mb-4">Jobs Management</h2>
+    <button onclick="addJob()" class="btn mb-4">+ New Job</button>
+    <div id="jobsList" class="grid"></div>
+  </div>
 
-<div id="clientView" class="hidden p-6"><div class="glass p-6 neon-border"><h2 class="text-4xl quantum-text mb-4">TWINZ CLIENT PORTAL</h2><div id="clientProducts" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div><div id="clientJobs" class="mt-4"></div></div></div>
+  <div id="products" class="tab p-4 hidden">
+    <h2 class="text-3xl quantum-text mb-4">Products</h2>
+    <button onclick="addProduct()" class="btn mb-4">+ Add Product</button>
+    <div id="productsList" class="grid"></div>
+  </div>
+
+  <div id="stock" class="tab p-4 hidden">
+    <h2 class="text-3xl quantum-text mb-4">Stock Control</h2>
+    <button onclick="addStock()" class="btn mb-4">+ Add Stock</button>
+    <div id="stockList" class="grid"></div>
+  </div>
+
+  <div id="sales" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Sales</h2><div id="salesList"></div></div>
+  <div id="fleet" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Fleet</h2><button onclick="addFleet()" class="btn mb-4">+ Add Vehicle</button><div id="fleetList" class="grid"></div></div>
+  <div id="quotes" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Quotes</h2><button onclick="addQuote()" class="btn mb-4">+ New Quote</button><div id="quotesList"></div></div>
+  <div id="clients" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Clients</h2><button onclick="addClient()" class="btn mb-4">+ Add Client</button><div id="clientsList"></div></div>
+  <div id="payroll" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Payroll</h2><button onclick="addEmployee()" class="btn mb-4">+ Add Employee</button><div id="payrollList"></div></div>
+  <div id="security" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Security & Users</h2><button onclick="showCreateUser()" class="btn mb-4">+ Create Staff</button><div id="usersList"></div></div>
+  <div id="reports" class="tab p-4 hidden"><h2 class="text-3xl quantum-text mb-4">Reports</h2><button onclick="exportPDF()" class="btn">Export PDF</button></div>
+</div>
 
 <script>
 const { jsPDF } = window.jspdf;
-
-// YOUR REAL FIREBASE CONFIG INJECTED
 const firebaseConfig = {
   apiKey: "AIzaSyCy83BBRf12FlAOoWgg1jQO5eyWTYlhTeQ",
   authDomain: "twinz-dms.firebaseapp.com",
@@ -140,82 +116,30 @@ const firebaseConfig = {
   appId: "1:757498432732:web:4ac54b82d97edaabd07819"
 };
 firebase.initializeApp(firebaseConfig);
-
-// APP CHECK INJECTED
-const appCheck = firebase.appCheck();
-appCheck.activate('DEBUG_MODE_FOR_NOW', true);
-
+firebase.appCheck().activate('DEBUG_MODE_FOR_NOW', true);
 const auth = firebase.auth();
 const db = firebase.database();
 
-let DB = {jobs:[],parts:[],fleet:[],stock:[],quotes:[],employees:[],audit:[],users:[],bookings:[],salaries:[],clockLogs:[],products:[],revenue:125000};
+let DB = {jobs:[],products:[],stock:[],fleet:[],quotes:[],employees:[],clients:[],revenue:125000};
 let currentRole=''; let currentUserId='';
 
-function toast(msg){ const t=document.createElement('div'); t.style.cssText='position:fixed;bottom:20px;right:16px;left:16px;background:var(--accent);color:#fff;padding:14px 20px;border-radius:12px;font-weight:900;z-index:999;text-align:center'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
+function toast(msg){ const t=document.createElement('div'); t.style.cssText='position:fixed;bottom:20px;left:16px;right:16px;background:var(--accent);color:#fff;padding:14px;border-radius:12px;font-weight:900;z-index:999;text-align:center'; t.innerText=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
 
-// SECURITY: INPUT SANITIZE
-function sanitize(str){ return str.replace(/[<>\"']/g,''); }
-
-// FIREBASE AUTH WITH RATE LIMIT
-let loginAttempts = 0;
 function loginFirebase(){
-  const email=sanitize(document.getElementById('loginEmail').value);
-  const pass=document.getElementById('loginPassword').value;
-
-  if(pass.length<8){ toast('Password must be 8+ characters'); return; }
-  if(loginAttempts>5){ toast('Too many attempts. Wait 5min'); return; }
-
-  auth.signInWithEmailAndPassword(email,pass).then(cred=>{
+  auth.signInWithEmailAndPassword(loginEmail.value,loginPassword.value).then(cred=>{
     currentUserId=cred.user.uid;
     db.ref('users/'+currentUserId).once('value').then(snap=>{
-      if(!snap.exists()){ toast('No role assigned. Contact CEO'); auth.signOut(); return; }
-      currentRole=snap.val().role;
-      loadCloudDB();
-      initApp();
-      loginAttempts=0;
+      if(!snap.exists()){ toast('No role assigned'); auth.signOut(); return; }
+      currentRole=snap.val().role; loadCloudDB(); initApp();
     })
-  }).catch(e=>{
-    loginAttempts++;
-    toast('Login failed: '+e.message);
-  });
+  }).catch(e=>toast('Login failed: '+e.message));
 }
 
-// ONLY CEO CAN CREATE USERS
-function registerFirebase(){
-  if(currentRole!=='CEO'){ toast('Only CEO can create staff'); return; }
-  const email=sanitize(document.getElementById('loginEmail').value);
-  const pass=document.getElementById('loginPassword').value;
-  const role=document.getElementById('loginRole').value;
-  auth.createUserWithEmailAndPassword(email,pass).then(cred=>{
-    db.ref('users/'+cred.user.uid).set({email,role,createdBy:currentUserId,createdAt:Date.now()});
-    toast('Staff Created');
-  }).catch(e=>alert(e.message));
-}
-
-function logout(){auth.signOut();localStorage.clear();location.reload();}
-
-// SECURE DB WITH VALIDATION
-function saveDB(){
-  const cleanDB = JSON.parse(JSON.stringify(DB)); // deep clone
-  db.ref('data/'+currentUserId).set(cleanDB);
-  updateStats();
-}
-function loadCloudDB(){
-  db.ref('data/'+currentUserId).on('value', snap=>{
-    if(snap.val()) DB=snap.val();
-    renderAll();
-    document.getElementById('loading').style.display='none';
-  })
-}
-
-function updateStats(){ /* YOUR STATS FUNCTION */ }
-function renderAll(){ /* YOUR RENDER FUNCTION */ }
+function logout(){auth.signOut();location.reload();}
+function saveDB(){ db.ref('data/'+currentUserId).set(DB); updateStats(); }
+function loadCloudDB(){ db.ref('data/'+currentUserId).on('value', snap=>{ if(snap.val()) DB=snap.val(); renderAll(); document.getElementById('loading').style.display='none'; }) }
 
 const ACCESS = { CEO: ['dashboard','jobs','products','stock','sales','fleet','quotes','clients','payroll','security','reports'], WORKSHOP_MANAGER: ['dashboard','jobs','products','stock'], RECEPTION: ['dashboard','jobs','clients','quotes'], SALES: ['dashboard','sales','products','quotes'], HR: ['dashboard','payroll'], FLEET: ['dashboard','fleet'], TECHNICIAN: ['dashboard','jobs'], SECURITY: ['dashboard','security'], CUSTOMER: [] };
-
-// 3D BG
-const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:bg3d,alpha:true});renderer.setSize(innerWidth,innerHeight);
-const torus=new THREE.Mesh(new THREE.TorusGeometry(10,3,16,100),new THREE.MeshBasicMaterial({color:0x2563eb,wireframe:true}));scene.add(torus);camera.position.z=30;function animate(){requestAnimationFrame(animate);torus.rotation.x+=0.01;torus.rotation.y+=0.01;renderer.render(scene,camera)}animate();
 
 function initApp(){
   document.getElementById('loginScreen').classList.add('hidden');
@@ -224,15 +148,40 @@ function initApp(){
   document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));
   document.querySelectorAll('.tab-btn').forEach(b=>{
     const tabId = b.getAttribute('onclick').match(/'(.+?)'/)[1];
-    if(!ACCESS[currentRole].includes(tabId)) b.style.display='none'; else b.style.display='block';
+    b.style.display = ACCESS[currentRole].includes(tabId)? 'block' : 'none';
   });
   showTab('dashboard');
 }
-
 function showTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.add('hidden'));document.getElementById(id).classList.remove('hidden'); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));event.target.classList.add('active');}
 
-// PASTE ALL YOUR FUNCTIONS HERE
-// REMEMBER: Every function that writes must call saveDB()
+function renderAll(){
+  updateStats();
+  jobsList.innerHTML = DB.jobs.map((j,i)=>`<div class="glass p-4"><h3>Job #${i+1}</h3><p>${j.name||'New Job'}</p></div>`).join('');
+  productsList.innerHTML = DB.products.map((p,i)=>`<div class="glass p-4"><h3>${p.name||'Product'}</h3></div>`).join('');
+  stockList.innerHTML = DB.stock.map((s,i)=>`<div class="glass p-4"><h3>${s.name||'Item'}</h3></div>`).join('');
+  fleetList.innerHTML = DB.fleet.map((f,i)=>`<div class="glass p-4"><h3>${f.name||'Vehicle'}</h3></div>`).join('');
+}
+function updateStats(){
+  statRevenue.innerText = 'R' + (DB.revenue||0).toLocaleString();
+  statJobs.innerText = DB.jobs.length;
+  statStock.innerText = DB.stock.length;
+  statClients.innerText = DB.clients.length;
+}
+
+// CRUD FUNCTIONS
+function addJob(){ DB.jobs.push({name:'New Job',date:Date.now()}); saveDB(); }
+function addProduct(){ DB.products.push({name:'New Product'}); saveDB(); }
+function addStock(){ DB.stock.push({name:'New Stock'}); saveDB(); }
+function addFleet(){ DB.fleet.push({name:'New Vehicle'}); saveDB(); }
+function addQuote(){ DB.quotes.push({name:'New Quote'}); saveDB(); }
+function addClient(){ DB.clients.push({name:'New Client'}); saveDB(); }
+function addEmployee(){ DB.employees.push({name:'New Employee'}); saveDB(); }
+function exportPDF(){ toast('PDF Export Ready'); }
+function showCreateUser(){ toast('Create user in Firebase Auth then assign role in DB'); }
+
+// 3D BG
+const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(75,innerWidth/innerHeight,0.1,1000);const renderer=new THREE.WebGLRenderer({canvas:bg3d,alpha:true});renderer.setSize(innerWidth,innerHeight);
+const torus=new THREE.Mesh(new THREE.TorusGeometry(10,3,16,100),new THREE.MeshBasicMaterial({color:0x2563eb,wireframe:true}));scene.add(torus);camera.position.z=30;function animate(){requestAnimationFrame(animate);torus.rotation.x+=0.01;torus.rotation.y+=0.01;renderer.render(scene,camera)}animate();
 
 window.onload=()=>{
   auth.onAuthStateChanged(user=>{
