@@ -102,18 +102,26 @@ input:checked +.slider:before{transform:translateX(26px)}
     <button class="tab-btn" onclick="showTab('reports')">Reports</button>
   </div>
 
-  <!-- TAB CONTENT - PASTE YOUR V10.5 TABS HERE -->
-  <div id="dashboard" class="tab p-4">PASTE DASHBOARD TAB HERE</div>
-  <div id="jobs" class="tab p-4 hidden">PASTE JOBS TAB HERE</div>
-  <div id="products" class="tab p-4 hidden">PASTE PRODUCTS TAB HERE</div>
-  <div id="stock" class="tab p-4 hidden">PASTE STOCK TAB HERE</div>
-  <div id="sales" class="tab p-4 hidden">PASTE SALES TAB HERE</div>
-  <div id="fleet" class="tab p-4 hidden">PASTE FLEET TAB HERE</div>
-  <div id="quotes" class="tab p-4 hidden">PASTE QUOTES TAB HERE</div>
-  <div id="clients" class="tab p-4 hidden">PASTE CLIENTS TAB HERE</div>
-  <div id="payroll" class="tab p-4 hidden">PASTE PAYROLL TAB HERE</div>
-  <div id="security" class="tab p-4 hidden">PASTE SECURITY TAB HERE</div>
-  <div id="reports" class="tab p-4 hidden">PASTE REPORTS TAB HERE</div>
+  <!-- TAB CONTENT - TEMP TABS FOR TESTING -->
+  <div id="dashboard" class="tab p-4">
+    <h2 class="text-3xl quantum-text mb-4">Dashboard</h2>
+    <div class="grid">
+      <div class="stat"><div class="stat num" id="statRevenue">R0</div><div>Revenue</div></div>
+      <div class="stat"><div class="stat num" id="statJobs">0</div><div>Active Jobs</div></div>
+    </div>
+    <button onclick="saveDB()" class="btn mt-4">Save Test Data</button>
+  </div>
+
+  <div id="jobs" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Jobs Tab</h2><p>Paste real jobs HTML here</p></div>
+  <div id="products" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Products Tab</h2><p>Paste real products HTML here</p></div>
+  <div id="stock" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Stock Tab</h2><p>Paste real stock HTML here</p></div>
+  <div id="sales" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Sales Tab</h2><p>Paste real sales HTML here</p></div>
+  <div id="fleet" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Fleet Tab</h2><p>Paste real fleet HTML here</p></div>
+  <div id="quotes" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Quotes Tab</h2><p>Paste real quotes HTML here</p></div>
+  <div id="clients" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Clients Tab</h2><p>Paste real clients HTML here</p></div>
+  <div id="payroll" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Payroll Tab</h2><p>Paste real payroll HTML here</p></div>
+  <div id="security" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Security Tab</h2><p>Paste real security HTML here</p></div>
+  <div id="reports" class="tab p-4 hidden"><h2 class="text-3xl quantum-text">Reports Tab</h2><p>Paste real reports HTML here</p></div>
 </div>
 
 <div id="clientView" class="hidden p-6"><div class="glass p-6 neon-border"><h2 class="text-4xl quantum-text mb-4">TWINZ CLIENT PORTAL</h2><div id="clientProducts" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div><div id="clientJobs" class="mt-4"></div></div></div>
